@@ -1,0 +1,112 @@
+<div class="page-wrapper">
+	<div class="onboarding-wrap onboarding-four easy-use-platform">
+		<div class="onboarding-image">
+			<div class="bubblebg-wrap">		
+				<div class="bubble green-dot b-sm x15"></div>		    
+				<!-- div class="bubble green-dot b-sign x1"></div -->
+				<div class="bubble green-dot b-lg x2"></div>
+				<div class="bubble green-dot b-lg x3"></div>
+				<div class="bubble green-dot b-sm x4"></div>
+				<div class="bubble green-dot b-md x5"></div>
+				<div class="bubble green-dot b-sm x6"></div>
+				<div class="bubble green-dot b-sm x8"></div>
+				<div class="bubble green-dot b-md x9"></div>
+				<div class="bubble green-dot b-exlg x10"></div>
+				<div class="bubble green-dot b-md x11"></div>
+				<div class="bubble green-dot b-lg x12"></div>
+				<div class="bubble green-dot b-sm x13"></div>
+				<div class="bubble green-dot b-exlg x14"></div>
+			</div>
+			<div class="onboarding-image-content {%if block.type == 'layout2'%}layout2-img-content{%endif%}">
+				<div class="onboarding-relative hide-on-mobile">
+					{%- if block.type == 'layout2'-%}	
+						<div class="new-layout2">
+							<div class="layout2-left">
+								{%- if block.imagex is not empty and block.imagex.one() is not null-%}
+								<img src="{{block.imagex.one().url}}">
+								{%- endif -%}
+								{%- if block.videoButtonText is not empty and block.video is not empty and block.video.one() is not null -%}
+									<a href="{{block.video.one().url}}" class="defult-btn pink-bg various fancybox.iframe">{{block.videoButtonText}}</a>
+								{%- endif -%}
+								{%- if block.titlex is not empty -%}
+									<h3>{{block.titlex}}</h3>
+								{%- endif -%}
+							</div>
+							<div class="layout2-right">
+								<div class="bubble yellow-dot b-sign"></div>
+								{%- if block.titlex is not empty -%}
+									<h3>{{block.titlex}}</h3>
+								{%- endif -%}
+								{%- if block.videoButtonText is not empty and block.video is not empty and block.video.one() is not null -%}
+									<a href="{{block.video.one().url}}" class="defult-btn pink-bg various fancybox.iframe">{{block.videoButtonText}}</a>
+								{%- endif -%}
+							</div>	
+							<div class="clearfix"></div>
+						</div>
+					{%- else -%}
+						<div class="bubble green-dot b-sign"></div>
+						<div class="onboarding-icondiv" {% if block.image is not empty and block.image.one() is not null and block.fillImageCircle%}style="background-image:url({{block.image.one().getUrl('onboardingIcon')}});background-size:cover;background-position:center;"{%endif%}>
+							{% if block.image is not empty and block.image.one() is not null and not block.fillImageCircle%}
+							<img src="{{block.image.one().getUrl('onboardingIcon')}}" alt="Icon" />
+							{%- endif -%}
+						</div>
+						<h3>{{block.titlex}}</h3>
+					{%- endif -%}
+				</div>
+				<div class="mobile-onboarding-content onboarding-relative">
+					<div class="bubble green-dot b-sign"></div>
+					{{block.descriptionx}}
+				</div>
+				<div class="onboarding-readmore d-lg-none">
+					<a href="javascript:void(0)" class="plus">read more<span class="icon"></span></a>
+					<a href="javascript:void(0)" class="minus">close<span class="icon"></span></a>
+				</div>
+				<div class="onboarding-nextbtn-div tbl-show {%if block.type == 'layout2'%}lyt2{%endif%}">
+					{%js%}
+						console.log("next = {{nextob}} tob = {{tob}}")
+					{%endjs%}
+					{%- if nextob <= tob -%}
+						{%- if not user.lightswitch3 -%} {# DIETS NOT CONFIGURED #}
+							<a href="/account/registration-preferences-diet" class="defult-btn pink-bg">Next</a>
+						{%- else -%}
+							<a href="{{siteUrl}}?ob={{nextob}}" class="defult-btn pink-bg">Next</a>
+						{%- endif -%}
+					{%- else -%}
+						{%- if not user.lightswitch3 -%} {# DIETS NOT CONFIGURED #}
+							<a href="/account/registration-preferences-diet" class="defult-btn pink-bg">Next</a>
+						{%- else -%}
+							<a href="{{siteUrl}}?ob={{nextob}}" class="defult-btn pink-bg save-onboarding">Next</a>
+						{%- endif -%}
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
+		<div class="onboarding-content">				
+			<div class="onboarding-content-inner">
+				<div class="logosign-iconbg">
+					<img src="/images/sign-icon-white.svg" alt="image" />
+				</div>
+				<img src="/images/TCB-logo-pink.png?v=5" alt="TCB" />
+				<div class="ob-inner-text">
+					<div class="ob-inner-top"></div>
+					<div class="ob-inner-middle">{{block.descriptionx}}</div>
+					<div class="ob-inner-bottom"></div>
+				</div>
+			</div>
+			<div class="onboarding-nextbtn-div">
+				{%- if nextob <= tob -%}
+					{%- if not user.lightswitch3 -%} {# DIETS NOT CONFIGURED #}
+						<a href="/account/registration-preferences-diet" class="defult-btn pink-bg">Next</a>
+					{%- else -%}
+						<a href="{{siteUrl}}?ob={{nextob}}" class="defult-btn pink-bg">Next</a>						
+					{%- endif -%}
+				{%- else -%}
+					<a href="{{siteUrl}}?ob={{nextob}}" class="defult-btn pink-bg save-onboarding">Next</a>
+				{%- endif -%}
+			</div>
+			<div class="dotsign-iconbg">
+				<img src="/images/dot-bg-r.svg" alt="image" />
+			</div>
+		</div>
+	</div>
+	</div>

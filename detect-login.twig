@@ -1,0 +1,7 @@
+<html>
+<head></head>
+<body>
+{%- set login = (not craft.app.user.isGuest) ? "1" : "0" -%}
+<div class="login-status">{{login}}</div>
+</body>
+</html>

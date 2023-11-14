@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% hook "seo" %}
+{%- include "_marketing/_includes/headcss"-%}
+{%- set diets = craft.categories.group('diets').all() -%}
+{%- if diets is not empty -%}
+	{%-css-%}
+	{%- for i in diets -%}		
+		.accpre-category-list li .accpre-category-boxdiv .round-cat#cat-{{i.id}}{border-color:{{i.colourTheme}} !important;color: {{i.colourTheme}};}
+		.accpre-category-list li .accpre-category-boxdiv:hover .round-cat#cat-{{i.id}}{background-color:{{i.colourTheme}} !important;color:#FFF;}
+		.diet-icon-{{i.id}}, 
+		#diet-icon-{{i.id}}{
+			border-color:{{i.colourTheme}} !important;
+			color: {{i.colourTheme}};
+		}
+		.diet-icon-{{i.id}}:hover,
+		#diet-icon-{{i.id}}:hover{
+			background-color:{{i.colourTheme}};
+			color: #FFF;
+		}	
+	{%- endfor -%}
+	{%-endcss-%}
+{%- endif -%} 
+{{siteSettings.googleAnalyticsMarketing|raw}}
+{%- block head-%}{%- endblock -%}
+<style>
+	iframe{max-width:100% !important;}
+	@media(max-width:768px){
+		figure:not(.timer) iframe{height:330px;}
+	}
+	@media(max-width:568px){
+		figure:not(.timer) iframe{height:270px;}
+	}
+	@media(max-width:430px){
+		figure:not(.timer) iframe{height:190px;}
+	}
+</style>
+</head>
+<body class="page-loader">
+	{%- include "_includes/loader" -%}
+	<div class="page-wrapper">
+		{%- include "_marketing/_includes/header" -%}
+		{%- block main -%}{%- endblock -%}
+		{%- include "_marketing/_includes/footer"-%}
+	</div>
+	<div class="loader"></div>
+	{%- include "_marketing/_includes/footjs"-%}
+	{%- if craft.app.request.pathInfo != '' and craft.app.request.pathInfo != 'home-marketing-test' and craft.app.request.pathInfo != 'plan-marketing-test'-%}
+		{%- include "_marketing/_includes/popup"-%}
+	{%- endif -%}
+	{%- include "_includes/anti-copy" -%}
+	{%js%}
+	$(".share-trigger").on('click',function(e){
+		e.preventDefault();
+		var t = $(this).attr("data-target");
+		$(".st-btn[data-network="+t+"]").click();
+	})
+	$(function(){
+		$(".various").fancybox();
+	})
+	{%endjs%}
+	{%- block foot -%}{%- endblock -%}
+</body>
+</html>

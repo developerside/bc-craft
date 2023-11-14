@@ -1,0 +1,35 @@
+{%- macro button(i,class) -%}
+	{%- if i.buttonx is not empty -%}
+			{%- set linkurl = ''-%}
+			{%- set target = '' -%}
+			{%- set btnText = ''-%}
+			{% for btn in i.buttonx.all() if linkurl == '' %}
+				{%- set btnText = btn.buttonTextx-%}
+				{%- if btn.buttonLinkx is not empty -%}												
+					{%- for link in btn.buttonLinkx.all() if linkurl == '' -%}
+						{%- if link.type == 'internalLinkx'-%}
+							{# {%- set linkurl = (link.linkUrlx is not empty and link.linkUrlx.one() is not null) ? link.linkUrlx.one().url : ''-%} #}
+							
+							{%- if link.linkUrlx is not empty and link.linkUrlx.one() is not null -%}
+								{%- set linkurl = link.linkUrlx.one().url -%}
+								{%- if linkurl is not empty and link.anchor is not empty -%}
+									{%- set linkurl = linkurl ~ link.anchor -%}
+								{%- endif -%}
+							{%- endif -%}
+							
+						{%- elseif link.type == 'externalLinkx'-%}
+							{%- set linkurl = (link.linkUrlx is not empty ) ? link.linkUrlx : ''-%}
+							{%- set target = 'target="_blank"' -%}
+						{%- elseif link.type == 'tcbAppLink'-%}
+							{%- set linkurl = (link.tcbapplink is not empty and link.tcbapplink.one() is not null) ? alias('@tcbapp')~'/'~link.tcbapplink.one().uri : ''-%}
+							{%- set target = 'target="_blank"' -%}
+						{%- endif -%}
+					{%- endfor -%}												
+				
+				{%- endif -%}
+			{%- endfor -%}
+			{%if linkurl is not empty%}
+				<a href="{{linkurl}}" {{target}} class="{{class}}">{{btnText}}</a>
+			{%endif%}
+		{%- endif -%}
+{%- endmacro -%}

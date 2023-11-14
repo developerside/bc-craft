@@ -1,0 +1,61 @@
+<!-- header -->
+<header class="site-header {% if entry is defined %} {% if entry.section == 'Recipes' %} recipesdetail-header {% endif %} {% endif %} {% if entry is defined %} {% if entry.section == 'Hot Topics' %} recipesdetail-header hotrecipesdetail-header {% endif %} {% endif %} {% if 'recipes/list' in craft.app.request.absoluteUrl %} innerpage-header {% endif %} {% if '/favourite' in craft.app.request.absoluteUrl %} favgroceries-header {% endif %} {% if '/groceries' in craft.app.request.absoluteUrl %} mygroceries-header {% endif %}{%if isDesktop == '0'%} fixed-search {%endif%}">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="header-innerwrap">
+					<div class="logo-div">
+						{%- set homelink = (craft.app.request.pathInfo == 'home') ? alias('@tcbmarketing') : '/home'-%}
+						<a href="{{homelink}}">
+							<img src="/images/TCB-logo.svg" alt="TCB" class="desktop-logo" />
+							<img src="/images/tcb-icon.svg" alt="TCB" class="tbl-logo" />
+						</a>
+					</div>
+					<div class="head-center-nav">
+						<ul class="navigation-ul">
+							<li class="recipes-li {%if '/recipes' in currentUrl%}active{%endif%}"><a href="/recipes/list"><span class="icon-div svg-fill"><img src="/images/recipes-icon.svg" alt="recipes-icon" /></span> Recipes</a></li>
+							<li class="favourites-li {%if '/favourite' in currentUrl%}active{%endif%}"><a href="/favourite"><span class="icon-div svg-fill"><img src="/images/favourite-icon.svg" alt="favourite-icon" /></span> Favourites</a></li>
+							<li class="groceries-li {%if '/groceries' in currentUrl%}active{%endif%}"><a href="/groceries"><span class="icon-div svg-fill"><img src="/images/groceries-icon3.svg" alt="groceries-icon" /></span> Groceries</a></li>
+							<li class="articles-li {%if '/hot-topics' in currentUrl%}active{%endif%}"><a href="/hot-topics/list"><span class="icon-div svg-fill"><img src="/images/articles-icon.svg" alt="articles-icon" /></span> Hot Topics</a></li>
+						</ul>
+					</div>
+					<div class="head-rightside {%if craft.app.request.pathInfo == 'groceries'%}grocery-head-rightside{%endif%}">
+						<div class="search-div svg-fill">
+							<img src="/images/search-icon.svg" alt="search-icon" />
+						</div>
+						<div class="searchform-headiv">
+							<form action="{{ url('/search/results') }}" autocomplete="off">
+								<input type="text" name="q" placeholder="Search for something?" class="form-control" required autocomplete="off">
+							</form>
+							<input type="text" name="hide-mobile-keyboard2" style="height:0;width:0;" class="d-none" />
+						</div>
+						<div class="setting-div">
+							<a href="javascript:void(0);" class="svg-fill setting-click"><img src="/images/setting-icon.svg" alt="setting-icon" /></a>
+						</div>
+						<div class="signup-btndiv">
+							{%-if pro == 0 -%}
+							<a href="/select-plan"  class="defult-btn">Upgrade to PRO</a>
+							{%-else-%}
+							<a href="/logout"  class="defult-btn logout">Logout</a>
+							{%-endif-%}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="back-resices-btndiv">
+		<a href="javascript:history.back(1);" class="svg-fill">
+			<img src="/images/back-resices.svg" alt="images">
+		</a>
+	</div>
+	<div class="back-hotresices-btndiv">
+		<a href="#" class="svg-fill">
+			<img src="/images/back-resices.svg" alt="images">
+		</a>
+	</div>
+	<div class="favgro-mobile-titlediv">
+		<h2 class="fav-recipes-title">My Favourite Recipes</h2>
+	</div>
+</header>
+<!-- header End -->

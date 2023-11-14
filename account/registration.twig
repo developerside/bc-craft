@@ -1,0 +1,244 @@
+{%- extends "_layout_onboarding" -%}
+{% block  main %}
+{%- if not craft.app.user.isGuest -%}
+	{% redirect "/home" %}
+{%- endif -%}
+
+{% macro errorList(errors) %}
+  {% if errors %}
+    {{ ul(errors, {class: 'errors',style:'color:#FF0000;'}) }}
+  {% endif %}
+{% endmacro %}
+
+{# `user` is defined if the form returns validation errors. #}
+{% set user = user ?? null %}
+	<div class="page-wrapper">
+		<header class="site-header mygroceries-header d-lg-none">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="header-innerwrap">
+							<div class="logo-div">
+								<a href="/">
+									<img src="/images/TCB-icon.svg" alt="TCB" class="tbl-logo">
+								</a>
+							</div>
+							<!-- div class="head-rightside">
+								<div class="setting-div">
+									<a href="javascript:void(0);" class="setting-s-icondiv">s</a>
+								</div>
+							</div -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		
+		<div class="account-preference-wrap cre-account-wrap">
+			<div class="accpre-image">
+				{%- set img = '' -%}
+				{%- if onboarding.image3 is not empty and onboarding.image3.one() is not null -%}
+					{%- set img = onboarding.image3.one() -%}
+					{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+				{%- endif -%}
+				<div class="accpre-bg" {%if img is not empty %}style="background-image: url({{img.url}});background-position:{{bgPosition}}"{%endif%}>
+					<div class="b-sign"></div>
+				</div>
+			</div>
+			<div class="accpre-content">
+				<div class="bubblebg-wrap">		
+					<div class="bubble b-sm x15"></div>		    
+				    <!-- div class="bubble b-sign x1"></div -->
+				    <div class="bubble b-lg x2"></div>
+				    <div class="bubble b-lg x3"></div>
+				    <div class="bubble b-sm x4"></div>
+				    <div class="bubble b-md x5"></div>
+				    <div class="bubble b-sm x6"></div>
+				    <div class="bubble b-sm x8"></div>
+				    <div class="bubble b-md x9"></div>
+				    <div class="bubble b-exlg x10"></div>
+				    <div class="bubble b-md x11"></div>
+				    <div class="bubble b-lg x12"></div>
+				    <div class="bubble b-sm x13"></div>
+				    <div class="bubble b-exlg x14"></div>
+				</div>
+				<div class="account-signin-text">Already a member? <a href="/login" class="defult-btn">SIGN IN</a></div>
+				<div class="accpre-content-inner">	
+					<div class="bubble b-sign"></div>				
+					<img src="/images/TCB-logo-white.png?v=6" alt="TCB" class="logo-img" />
+					<h3>Create your <strong>FREE</strong> account</h3>
+					{# <!--
+					<form class="register-form" method="post" accept-charset="UTF-8" autocomplete="off" id="register-form" onsubmit="return checkReg(this)">
+						  {{ csrfInput() }}
+						  <input type="hidden" name="action" value="recaptcha/recaptcha/verify-submission">
+						  <input type="hidden" name="verified-action" value="users/save-user">
+						  {{ redirectInput('/account/registration-preferences') }}
+						<div class="form-group">
+							 <input type="text" id="firstName" name="firstName" placeholder="First name" class="form-control" required />
+							{{ user ? _self.errorList(user.getErrors('firstName')) }}
+						</div>
+						<div class="form-group">
+							<input type="text" id="lastName" name="lastName" placeholder="Last name" class="form-control" required />
+							{{ user ? _self.errorList(user.getErrors('lastName')) }}
+						</div>
+						<div class="form-group">
+							<input type="email" id="email" name="email" placeholder="email" class="form-control" required />
+							{{ user ? _self.errorList(user.getErrors('email')) }}
+						</div>
+						<div class="form-group">
+							<input type="password" id="password" name="password" placeholder="Password" class="form-control" required />
+							{{ user ? _self.errorList(user.getErrors('password')) }}
+							<span class="eye-icon svg-fill show-password">
+								<img src="/images/eye-icon.svg" alt="Eye" />
+							</span>
+						</div>
+						<div class="form-group">
+							<input type="password" id="confirmpassword" name="confirmpassword" placeholder="Verify password" class="form-control" required />
+							<span class="eye-icon svg-fill show-password">
+								<img src="/images/eye-icon.svg" alt="Eye" />
+							</span>
+						</div>
+						<div class="form-group">
+						 <select name="fields[age]" class="form-control" required >
+								<option value="">Age</option>
+								<option value="15-20">15 - 20</option>
+								<option value="21-30">21 - 30</option>
+								<option value="31-40">31 - 40</option>
+								<option value="41-50">41 - 50</option>
+								<option value="50-60">50 - 60</option>
+								<option value="61 and above">61 and above</option>
+							   </select>
+						</div>
+						<div class="gendar-checkbox-div">
+							<div class="form-check form-check-inline gendar-checkbox">
+							  <input class="form-check-input gender" type="radio" name="fields[gender]" value="male">
+							  <label class="form-check-label" for="Male"><span>Male</span></label>
+							</div>
+							<div class="form-check form-check-inline gendar-checkbox">
+							  <input class="form-check-input gender" type="radio" name="fields[gender]" value="female">
+							  <label class="form-check-label" for="Female"><span>Female</span></label>
+							</div>
+						</div>
+						<div class="form-check">
+						    <input type="checkbox" class="form-check-input" id="agreeterm" >
+							{%- set link = '' -%}
+							{%- if onboarding.linkTo is not empty -%}
+								{%- for block in onboarding.linkTo.all() -%}
+									{%- if block.type == 'internal'-%}
+										{%- if block.item is not empty and block.item.one() is not null -%}
+											{%- set link = '<a href="' ~ block.item.one().url ~ '" target="_blank">' -%}
+										{%- endif -%}
+									{%- elseif block.type == 'external' -%}
+										{%- if block.siteUrl is not empty -%}
+											{%- set link = '<a href="' ~ block.siteUrl ~ '" target="_blank" style="color:#6d6e70;">' -%}
+										{%- endif -%}
+									{%- elseif block.type == 'asset' -%}
+										{%- if block.file is not empty and block.file.one() is not null -%}
+											{%- set link = '<a href="' ~ block.file.one().url ~ '" target="_blank" style="color:#6d6e70;">' -%}
+										{%- endif -%}
+									{%- endif -%}
+								{%- endfor -%}
+							{%- endif -%}
+						    <label class="form-check-label" for="agreeterm"></label>{%if link is not empty%}{{link|raw}}{%endif%}I agree to terms and conditions{%if link is not empty%}</a>{%endif%}
+						</div>
+						<div class="form-group"><br/>
+							{{ craft.recaptcha.render() }}
+						</div>
+						<div class="text-center">
+							<input type="submit" class="defult-btn" value="Create my FREE account" />
+						</div>
+					</form>	
+					--> #}
+				{%- set rUrl = alias('@tcbapp')~'?ob=1' -%}
+				{{ craft.freeform.form("freeAccountRegistration").render({
+					returnUrl:rUrl,
+				}) }}
+				
+							
+
+				</div>				
+			</div>
+		</div>
+	</div>
+	{%css%}
+		.form-check-label::after{
+			content: ""!important;
+			color:transparent !important;
+			margin-left:0 !important;
+		} 
+		.sigin-in-form .eye-icon, .register-form .eye-icon{right:-2px;}
+		.register-form .defult-btn{margin-top:15px;}
+	{%endcss%}
+	{%js%}
+		function checkReg(theForm){
+			var f = $("form#register-form"),err = '';
+			if(f.find("input[name=password]").val() != f.find("input[name=confirmpassword]").val()){
+				err += "- Password confirmation did not match \n"
+			}
+			if(f.find("input.gender:checked").length == 0){
+				err += "- Please select gender \n"
+			}
+			if(f.find("input#agreeterm:checked").length == 0){
+				err += "- Please indicate you agree the Terms and Conditions \n"
+			}
+			if(f.find("textarea#g-recaptcha-response").val() == '' ){
+				err += "- Please prove you are not a robot."
+			}
+			if(err != ''){
+				alert(err);
+				return false;
+			}else{
+				f.submit();
+				return false;
+			}		
+		}
+		$(function(){
+		
+			
+			$('<span class="eye-icon svg-fill show-password"><img src="/images/eye-icon.svg" alt="Eye" /></span>').insertAfter('input[type=password]');
+			
+			$(".show-password").on("click",function(){
+				if($(this).prev("input[type=password]").length)
+				$(this).prev("input[type=password]").attr("type","text")
+				else
+				$(this).prev("input[type=text]").attr("type","password");
+			})
+			
+			var l = $("label[for=form-input-gender]");
+				fg = l.parent(".form-group"),
+				rw = fg.parent(".row"),
+				rw.addClass("gendar-checkbox-div");
+				l.hide();
+				fg.find(".form-check-inline").addClass("gendar-checkbox");
+				fg.find("input").hide();
+				fg.find("label").each(function(){
+					$(this).html("<span>"+$(this).text()+"</span>");
+				});
+			{%- set link = '' -%}
+			{%- if onboarding.linkTo is not empty -%}
+				{%- for block in onboarding.linkTo.all() -%}
+					{%- if block.type == 'internal'-%}
+						{%- if block.item is not empty and block.item.one() is not null -%}
+							{%- set link = block.item.one().url -%}
+						{%- endif -%}
+					{%- elseif block.type == 'external' -%}
+						{%- if block.siteUrl is not empty -%}
+							{%- set link = block.siteUrl-%}
+						{%- endif -%}
+					{%- elseif block.type == 'asset' -%}
+						{%- if block.file is not empty and block.file.one() is not null -%}
+							{%- set link = block.file.one().url-%}
+						{%- endif -%}
+					{%- endif -%}
+				{%- endfor -%}
+			{%- endif -%}
+			
+			{%- if link is not empty -%}
+				var agreetxt = $("label[for=form-input-agreeToTermsAndConditions]").text();
+				$("label[for=form-input-agreeToTermsAndConditions]").html('');
+				$('<a href="{{link}}" target="_blank">'+agreetxt+'</a>').insertAfter("label[for=form-input-agreeToTermsAndConditions]");
+			{%- endif -%}
+		})
+	{%endjs%}
+
+{% endblock %}

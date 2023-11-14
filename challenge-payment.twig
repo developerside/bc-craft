@@ -1,0 +1,86 @@
+{#====================== PAYMENT FORM FOR MARKETING SITE ================ #}
+{%- extends "_marketing/_layout"-%}
+{% html at head %}
+	<title>Challenge Payment - Transformation Cook Book</title>
+{% endhtml %}
+{% css "/_marketing/css/general.css" %}
+{%- block main -%}
+{%css%}
+	.form-check{text-align:left;}
+{%endcss%}
+
+<section class="meet-the-people-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+					{{ craft.freeform.form("challengePayment").render() }}
+					<button class="defult-btn btn btn-primary mt-5" type="" id="submit-trigger">Submit</button>	
+			</div>
+		</div>
+	</div>
+</section>
+{%- endblock -%}
+{% js "/_marketing/js/general.js" %}
+{%js%}
+	function validateEmail(email) {
+		const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(String(email).toLowerCase());
+	}
+	function total(){
+		let q = $("input#quantity-ticket").val();
+		if(q != '' ){
+			let t = parseInt(q) * 1
+			$("input[name=totalAmountPayable]").val(t);
+			$("#total-amount-text strong").text(`Total amount: $${t} AUD`);
+		}else{
+			$("input[name=totalAmountPayable]").val('');
+			$("#total-amount-text strong").text(`Total amount: `);
+		}
+		
+	}
+	$(function(){ 
+		var submitPaymentForm = 0,i;
+		var f = $("form#challenge-payment");			
+		if(f.length){			
+			f.find("button[name=form_page_submit]").hide();		
+			$("input#quantity-ticket").on("keyup",total);			
+			$("input#quantity-ticket").on("change",total);
+			$("input#quantity-ticket").on("keydown",function(e){
+				 let code = e.keyCode || e.which;
+				 console.log("code = "+code);
+				 if(code !== 69 && code !== 109 && code !== 189){
+					return true;
+				 }else{
+					return false;
+				 }
+			});			
+			$("#submit-trigger").on("click",function(e){
+				e.preventDefault();
+				$(".loader").show();
+				var v = f.find("input[name=email]").val();
+				if(!validateEmail(v)){
+					$(".loader").hide();
+					alert("Invalid email address");
+				}else{
+					f.find("button[name=form_page_submit]").trigger("click");
+				}
+			});			
+			i = setInterval(function(){
+				if(submitPaymentForm == 1 && f.find('.alert.alert-danger').length){
+					submitPaymentForm = 0;
+					$(".loader").hide();
+					$('html, body').animate({ scrollTop: '0' }, 'fast');
+				}else if(submitPaymentForm == 1 && f.find('.alert.alert-success').length){
+					submitPaymentForm = 0;
+					clearInterval(i);
+					window.location = "/challenge-payment-success";					
+				}
+			},1000);			
+			f.find("button[name=form_page_submit]").on("click",function(){
+				submitPaymentForm = 1;
+				
+			})
+		}	
+	})
+
+{%endjs%}

@@ -1,0 +1,20 @@
+{%- if diets is not empty -%}
+	{%- for d in diets -%}
+		<li>
+			{# <a href="/recipes/list-marketing?diet={{d.id}}"> #}
+			   <a href="{{d.url}}">
+				<div class="accpre-category-img">
+					{%- if d.image is not empty and d.image.one() is not null -%}
+					<img src="{{d.image.one().getUrl('resizeTo200px')}}" alt="image" />
+					{%- endif -%}
+				</div>
+				<div class="accpre-category-boxdiv">
+					
+					<h4>{{d.title}}</h4>
+					<p>VIEW RECIPES</p>
+					<div class="round-cat" id="cat-{{d.id}}">{{d.textbox}}</div>
+				</div>
+			</a>
+		</li>
+	{%- endfor -%}
+{%- endif -%}

@@ -1,0 +1,70 @@
+<!-- Sidebar section -->
+<section class="filterside-section recipeside-section">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="slidertop-courve"></div>
+	<div class="bubble b-sign"></div>
+	<div class="slidercenter-courve"></div>
+	<div class="sliderbtm-courve"></div>
+
+	<a href="#" class="side-recipe-info">
+		<span class="info-i">i</span>
+	</a>
+	<div class="side-grocery-info">
+		<ul>
+			<li>
+				<label>item</label>
+				<span class="grocery-title" id="ingredient-title-info"></span>
+			</li>
+			<li>
+				<label>Category</label>
+				<span class="grocery-title" id="ingredient-category-info"></span>
+			</li>
+			<li class="quantity-box">
+				<label>Quantity</label>
+				<span class="grocery-title" id="ingredient-value-info">1</span>
+				<div class="grocery-qty">
+					<a href="javascript:void(0);" class="qty-plus svg-fill" id="ing-qty-plus"><img src="/images/plus-icon-grey.svg" alt="+" /></a>
+					<a href="javascript:void(0);" class="qty-minus svg-fill" id="ing-qty-minus"><img src="/images/minus-sign.svg" alt="-" /></a>
+				</div>
+			</li>
+			<li>
+				<label class="recipe-lbl">Recipe</label>
+				<div class="recipeside-slider">
+					<!--
+					<div>
+						<div class="grocery-item">
+							<div class="grocery-item-image">
+								<img src="images/banner-3.jpg" alt="image" class="mealadded-img">
+							</div>
+							<p>Recipe Title goes here may have two lines or more</p>
+						</div>
+					</div>
+					-->
+				</div>
+			</li>
+			<li>
+				<button class="grocery-btn" id="update-quantity">Done</button>
+			</li>
+		</ul>
+	</div>			
+	<ul class="filter-social">
+		{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+		{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+	</ul>
+	{%if isDesktop == 1%}
+	<div class="bubblebg-wrap filter-bubble">		
+		<div class="bubble b-sm x122 yellow"></div>		    
+		<div class="bubble b-md x922 pink"></div>
+		<div class="bubble b-sm x1522 skin"></div>
+		<div class="bubble b-md x822 green"></div>
+		<div class="bubble b-lg x522 yellow-big"></div>
+	</div>
+	{%- endif -%}
+	<form name="update-groceries" method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="d-none">
+	  {{ csrfInput() }}
+	  {{ actionInput('users/save-user') }}
+	  {{ hiddenInput('userId', user.id) }}
+	  <input type="hidden" name="fields[groceryItems]" value="">
+	</form>
+</section>
+<!-- Sidebar section End -->

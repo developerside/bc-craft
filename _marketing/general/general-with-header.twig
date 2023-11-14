@@ -1,0 +1,37 @@
+{% import '/_marketing/_macros' as tcbMacro %}
+<section class="homerbanner-section">
+<div class="homebanner-slider">
+	{%- if entry.heroSlider is not empty -%}
+		{%- for block in entry.heroSlider.all() -%}
+			<div>
+				<div class="banner-slidediv">
+					{%- set img ='' -%}				
+					{%- set bgPosition = '' -%}
+					{%- if block.image is not empty and block.image.one() is not null-%}
+						{%- set img = block.image.one() -%}		
+						{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+						{%- set img = img.getUrl('resizeTo1920px')-%}
+					{%- endif -%}
+					<div class="banner-bgdiv" {%if img is not empty%}style="background-image: url({{img}});background-position:{{bgPosition}}"{%endif%}></div>
+					<div class="banner-content">
+						{%- if block.heading is not empty -%}
+						<div class="banner-title">
+							{{block.heading|nl2br|raw}}
+						</div>
+						{%- endif -%}
+						{%- if block.subHeading is not empty -%}
+						<h3>{{block.subHeading}}</h3>
+						{%- endif -%}
+						
+						{{tcbMacro.button(block,'defult-btn pink-bg')}}	
+					</div>
+				</div>
+			</div>
+		{%- endfor -%}
+	{%- endif -%}
+</div>
+<div class="homerbanner-iconover">
+	<img src="/_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB" />
+</div>
+</section>
+{%- include "_marketing/general/_partials/page-modules" with {entry:entry}-%}

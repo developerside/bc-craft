@@ -1,0 +1,51 @@
+<!-- Sidebar add to groceries section -->
+<section class="filterside-section addgrocerieside-section" oncopy="Copyright.showContext();return false;">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="slidertop-courve">
+		
+	</div>
+	<div class="bubble b-sign"></div>
+	<div class="slidercenter-courve"></div>
+	<div class="sliderbtm-courve"></div>
+	<div class="addgrocerieside-content">
+		<h3>Add to Groceries</h3>
+		<div class="addgrositem-div">
+			<h4 class="recipe-title"></h4>
+			<div class="grocery-qty">
+				<a href="#" class="qty-plus svg-fill"><img src="/images/plus-icon-grey.svg" alt="+" /></a>
+				<span>1</span>
+				<a href="#" class="qty-minus svg-fill"><img src="/images/minus-sign.svg" alt="-" /></a>
+			</div>
+		</div>
+		<div class="itemdelete-content">
+			<div class="itemdelete-p-text">
+				<a href="javascript:void;" style="cursor:default;">Items to add</a>
+				<a href="#" class="delete-all-groceries">Delete All</a>
+			</div>			
+			<ul class="itemdelete-ulist">
+				
+			</ul>
+		</div>
+	</div>			
+	<div class="itemdelete-coutdiv submit-save-groceries defult-btn" style="cursor:pointer;"></div>
+	{%if isDesktop == 1%}
+	<div class="bubblebg-wrap filter-bubble">		
+		<div class="bubble b-sm x122 yellow"></div>		    
+		<div class="bubble b-md x922 pink"></div>
+		<div class="bubble b-sm x1522 skin"></div>
+		<div class="bubble b-md x822 green"></div>
+		<div class="bubble b-lg x522 yellow-big"></div>
+	</div>
+	{%- endif -%}
+	<form name="save-groceries" method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="d-none">
+	  {{ csrfInput() }}
+	  {{ actionInput('users/save-user') }}
+	  {{ hiddenInput('userId', user.id) }}
+	  <input type="hidden" name="fields[groceryItems]" value="">
+	  <div class="load-groceries"></div>
+	  	 
+	 	      
+	</form>
+	
+</section>
+<!-- Sidebar add to groceries section -->

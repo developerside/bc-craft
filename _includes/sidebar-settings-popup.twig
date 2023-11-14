@@ -1,0 +1,87 @@
+<!-- Setting popup -->
+<section class="filterside-section setting-sidebar">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="slidertop-courve"></div>
+	<div class="slidercenter-courve"></div> 
+	<div class="sliderbtm-courve">
+		<div class="bubble b-sign"></div> 
+	</div>
+	<div class="setting-sideinner">
+		<!--<a href="javascript:void(0);" class="setting-back-arrow svg-fill"><img src="/images/arrow-left.svg" alt="Images" /></a>-->
+		<div class="setting-s-icondiv">{{user.firstName|first}}</div>
+		<div class="setting-div">
+			<a href="#" class="svg-fill gear-icon"><img src="/images/setting-icon.svg" alt="setting-icon" />	</a>
+		</div>
+		<div class="update-preferece-inner">
+			<a href="javascript:void(0);" class="edit-profile-click">edit profile</a>
+			<h3 class="title-filter">Update your preferences</h3>
+			<ul class="setting-linkul">
+				<li><a href="#" class="settings-meals">Preferred meals?</a></li>
+				<li><a href="#" class="settings-diet">Select your diet preferences</a></li>
+				<!-- <li><a href="#" class="settings-people">How many people will you be cooking for?</a></li> -->
+				{%- if pro == 1-%}
+				<li><a href="/select-your-plan/manage-subscription">Manage Subscription</a></li>
+				{%- else-%}
+				<li><a href="/select-plan">Upgrade to PRO</a></li>
+				{%- endif -%}
+				<li>&nbsp;</li>
+				<li><a href="/logout" class="logout">Logout</a></li>
+			</ul>
+		</div>
+		<div class="editprofile-formdiv">
+			<h3 class="title-filter">Edit your Profile</h3>
+			<form name="update-info" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+				 {{ csrfInput() }}
+				  {{ actionInput('users/save-user') }}
+				  {{ hiddenInput('userId', user.id) }}
+				<div class="form-group">
+					<label>First Name *</label>
+					<input type="text" name="firstName" value="{{user.firstName}}" required />
+				</div>
+				<div class="form-group">
+					<label>Last Name *</label>
+					<input type="text" name="lastName" value="{{user.lastName}}" required />
+				</div>
+				<div class="form-group">
+					<label>Age Group *</label>
+					<input type="hidden" id="age-field" name="fields[age]" value="{{user.age}}">
+				 <select id="age-group" required="">
+						<option value="">Age</option>
+						<option value="15-20" {%if user.age == '15-20'%}selected{%endif%}>15 - 20</option>
+						<option value="21-30" {%if user.age == '21-30'%}selected{%endif%}>21 - 30</option>
+						<option value="31-40" {%if user.age == '31-40'%}selected{%endif%}>31 - 40</option>
+						<option value="41-50" {%if user.age == '41-50'%}selected{%endif%}>41 - 50</option>
+						<option value="50-60" {%if user.age == '50-60'%}selected{%endif%}>50 - 60</option>
+						<option value="61 and above" {%if user.age == '61 and above'%}selected{%endif%}>61 and above</option>
+					   </select>			
+				</div>				
+				<div class="form-check" style="text-align:left;">
+					<input type="radio" class="form-check-input" id="maleradio"name="fields[gender]" value="male" {%if user.gender == 'male'%}checked{%endif%} >
+					<label class="form-check-label" for="maleradio">Male</label>
+				</div>
+				<div class="form-check" style="text-align:left;">
+					<input type="radio" class="form-check-input" id="femaleradio"name="fields[gender]" value="female" {%if user.gender == 'female'%}checked{%endif%} >
+					<label class="form-check-label" for="femaleradio">Female</label>
+				</div>
+				<div class="editpro-btndiv">
+					<button class="editpro-btn">save</button>
+				</div>
+			</form>
+		</div>
+		
+		<ul class="filter-social">
+			{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+			{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+		</ul>
+	</div>
+	{%if isDesktop == 1%}
+	<div class="bubblebg-wrap filter-bubble">		
+		<div class="bubble b-sm x122 yellow"></div>		    
+		<div class="bubble b-md x922 pink"></div>
+		<div class="bubble b-sm x1522 skin"></div>
+		<div class="bubble b-md x822 green"></div>
+		<div class="bubble b-lg x522 yellow-big"></div>
+	</div>
+	{%- endif -%}
+</section>
+<!-- Setting popup End -->  

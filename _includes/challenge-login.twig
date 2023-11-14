@@ -1,0 +1,26 @@
+  {% if errorMessage is defined %}
+    <p style="color:#FF0000;">{{ errorMessage }}</p>
+  {% endif %}
+<form method="post" accept-charset="UTF-8" style="text-align:left;">
+  {{ csrfInput() }}
+  {{ actionInput('users/login') }}
+  {{ redirectInput(craft.app.request.absoluteUrl) }}
+  <div class="row">
+	<div class="form-group col-sm-12 col-12">
+		<label for="form-input-loginName" class="required">Email</label>
+		<input class="form-control " name="loginName" type="email" id="loginName" required>
+	</div>
+   </div>
+  <div class="row">
+	<div class="form-group col-sm-12 col-12">
+		<label for="form-input-password" class="required">Password</label>
+		<input class="form-control " name="password" type="password" id="password" required>
+	</div>
+  </div>
+	<div class="row ">
+		<div class="form-group col-sm-12 col-12 submit-align-left">                
+            <button class="defult-btn pink-bg btn btn-primary" type="submit">Submit</button>
+        </div>
+    </div>
+
+</form>

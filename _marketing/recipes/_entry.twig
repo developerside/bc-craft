@@ -1,0 +1,238 @@
+{% extends "_marketing/_layout" %}
+{#
+{% html at head %}
+	<title>{{entry.title}} - Transformation Cook Book</title>
+	{%- set metaimg = 'https://www.transformationcookbook.com/siteassets/Onboarding/_resizeTo1920px/Shar-Shopping-3-Edited-hompeage.jpg'-%}
+	{%- if entry.mainHeaderImage is not empty and entry.mainHeaderImage.one() is not null -%}
+		{%- set img = entry.mainHeaderImage.one() -%}
+		{%- set metaimg = img.getUrl('resizeTo1025px') -%}
+	{%- endif -%}
+	<meta name="description" content="{{entry.textEditorSimple|striptags}}">
+    <meta property="og:type" content="website">
+	<meta property="og:site_name" content="Transformation Cook Book">
+	<meta property="og:url" content="{{ craft.app.request.absoluteUrl }}">
+	<meta property="og:title" content="{{entry.title}} - Transformation Cook Book">
+	<meta property="og:description" content="{{entry.textEditorSimple|striptags}}">
+	<meta property="og:image" content="{{metaimg}}">
+	<meta property="og:image:secure_url" content="{{metaimg}}">
+	<meta property="og:image:width" content="1200"/>
+	<meta property="og:image:height" content="630"/>
+	<meta property="og:image:type" content="image/png">
+	<meta property="og:locale" content="en-US">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="{{entry.title}} - Transformation Cook Book">
+	<meta name="twitter:description" content="{{entry.textEditorSimple|striptags}}">
+	<meta name="twitter:url" content="{{ craft.app.request.absoluteUrl }}">
+	<meta name="twitter:image" content="{{metaimg}}"> 	 
+{% endhtml %}
+#}
+{% css "/_marketing/css/general.css" %}
+{% block main %}
+	{% import '_macros' as tcbMacro %}
+	<section class="recipes-bgsection">
+		<div class="recipes-bgdiv">
+			{{tcbMacro.setBannerImage(entry)}}
+		</div>
+	</section>
+	<section class="recipes-description-section" oncopy="Copyright.showContext();return false;">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="recipes-descontent">							
+						<div class="fav-recipe-content">
+							<div class="recipe-textdiv">RECIPE</div>
+							<h2>{{entry.title}}</h2>
+							<p class="fav-recipe-sub">
+								{# {%if entry.textbox is not empty%}<span>{{entry.textbox}}</span>{%endif%} #}
+								{%- set hook = entry.hookWords.all() -%}
+								{%- if hook is not empty -%}
+									{%- for h in hook -%}
+										<span>{{h.title}}</span>
+									{%- endfor -%}
+								{%- endif -%}
+								{%if entry.textbox2 is not empty%}<span>{{entry.textbox2}}</span>{%endif%}
+							</p>
+							{%- set recipeDiets = entry.diets.all()-%}
+							{%- if recipeDiets is not empty -%}
+							<ul class="dietlist-ul">
+								{%- set ctr = 1-%}
+								{%- for d in recipeDiets -%}																
+									<li class="diet-icon-{{d.id}}">{{d.textbox}}</li>
+									{%- set ctr = ctr + 1-%}
+								{%- endfor -%}
+							</ul>
+							{%- endif -%}
+							<div class="fav-recipe-sub tbl-display">
+								{# {%if entry.textbox is not empty%}<span>{{entry.textbox}}</span>{%endif%} #}
+								{%- set hook = entry.hookWords.all() -%}
+								{%- if hook is not empty -%}
+									{%- for h in hook -%}
+										<span>{{h.title}}</span>
+									{%- endfor -%}
+								{%- endif -%}
+								{%if entry.textbox2 is not empty%}<span>{{entry.textbox2}}</span>{%endif%}
+							</div>
+							{%- if entry.textEditorSimple is not empty-%}
+							<div class="short-text">{{entry.textEditorSimple}}</div>
+							{%- endif -%}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	{%- set uri = craft.app.request.absoluteUrl -%}
+	{%- set isLivePreview = 0 -%}
+	{%- if 'craft-live-preview' in uri or 'craft-preview' in uri-%}
+		{%- set isLivePreview = 1 -%}
+	{%- endif -%} 
+	{%-if not entry.freeAccess and isLivePreview == 0 %}
+		{%- set gopro = craft.entries.section('callToActionMarketing').slug('elevate-your-cooking').one() -%}
+		{%- if gopro is not empty -%}
+			{%- include "_marketing/_includes/cta2" with {cta:gopro}-%}
+		{%- endif -%}
+	{%-else-%}	
+	<section class="recipes-tabar-contentsec" oncopy="Copyright.showContext();return false;">
+			<div class="sticky-recipes-tabar">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="rectab-pills">							  
+								<ul class="nav nav-tabs" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" data-toggle="tab" href="#Ingredients" role="tab">Ingredients</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" data-toggle="tab" href="#Instructions" role="tab">Instructions</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" data-toggle="tab" href="#Nutrition" role="tab">Nutrition</a>
+									</li>
+								</ul>
+							</div>
+							<div class="rectab-rightpart" >
+								<div class="mealadded-slectdrop">
+									<div class="mealadded-count-click"><span>SERVINGS&nbsp;&nbsp;•&nbsp;&nbsp;</span>{{entry.number}}</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="rectab-contentwrap">		
+							<div class="tab-content">
+								<div class="tab-pane active" id="Ingredients" role="tabpanel">
+									{%- if entry.ingredientsV2 is not empty -%}
+									{%- for i in entry.ingredientsV2.all() -%}
+										{%- if i.heading is not empty -%}
+											<h3>{{i.heading}}</h3>
+										{%- endif -%}	
+										{%- if i.ingredients is not empty and i.ingredients.ingredient is not empty -%}
+											<table class="table ingredients-list" >
+											{%- for b in i.ingredients.ingredient.all() -%}
+												{%- if b.ingredientItem is not empty and b.ingredientItem.one() is not null-%}
+													{%- set msrmnt = (b.measurementx is not empty and b.measurementx.one() is not null) ? b.measurementx.one().title : '' -%}
+													{%- set msrmntId = (b.measurementx is not empty and b.measurementx.one() is not null) ? b.measurementx.one().id : '' -%}
+													<tr data-recipeId="{{entry.id}}" data-recipe-title="{{entry.title}}" data-ingredientId="{{b.ingredientItem.one().id}}" data-ingredient-title="{{b.ingredientItem.one().title}}" data-amount="{{b.amountx}}" data-fraction="{{b.decimalFraction}}" data-measurement-id="{{msrmntId}}" data-measurement-title="{{msrmnt}}">
+														<td><strong>{{b.ingredientItem.one().title}}</strong></td>
+														{%- if b.decimalFraction is not empty and b.decimalFraction != '0' -%}
+															<td class="ingredient-amount">{{b.amountx}} {{b.decimalFraction}} {{msrmnt}}</td>
+														{%- else -%}
+															<td class="ingredient-amount">{{b.amountx}} {{msrmnt}}</td>
+														{%- endif -%}
+													</tr>
+												{%- endif -%}
+											{%- endfor -%}
+											</table><br/>
+										{%- endif -%}										
+									{%- endfor -%}	
+								{%-endif-%}
+								</div>
+								<div class="tab-pane" id="Instructions" role="tabpanel">
+									<div class="instructions-tabcontent">
+										{%- if entry.instructions is not empty -%}
+										<ol>
+											{%- for i in entry.instructions.all() -%}
+												{%- if i.type == 'addStep'-%}
+												<li>{{i.instructions}}</li>
+												{%- elseif i.type == 'tcbTips'-%}
+												<li class="no-counter">{{i.tips}}</li>
+												{%- endif -%}
+											{%- endfor -%}
+										</ol>
+									{%- endif -%}
+									</div>
+								</div>
+								<div class="tab-pane" id="Nutrition" role="tabpanel">
+										<table class="table">
+										{%- if entry.textbox9 is not empty-%}
+										<tr>
+											<td><strong>Calories (per serving)</strong></td>
+											<td>{{entry.textbox9}}</td>
+										</tr>
+										{%- endif -%}
+										
+										{%- if entry.textbox5 is not empty-%}
+										<tr>
+											<td><strong>Protein</strong></td>
+											<td>{{entry.textbox5}}</td>
+										</tr>
+										{%- endif -%}
+										
+										{%- if entry.textbox7 is not empty-%}
+										<tr>
+											<td><strong>Carbs</strong></td>
+											<td>{{entry.textbox7}}</td>
+										</tr>
+										{%- endif -%}
+										
+										{%- if entry.textbox3 is not empty-%}
+										<tr>
+											<td><strong>Fat</strong></td>
+											<td>{{entry.textbox3}}</td>
+										</tr>
+										{%- endif -%}
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	{%-endif-%}
+<p>&nbsp;</p>
+{%- include "_includes/sidebar-social-share" -%}
+{# <!-- <div class="invisible"><div class="sharethis-inline-share-buttons" data-url="{{craft.app.request.absoluteUrl}}" data-title="{{entry.title}}" data-image="{{metaimg}}" data-description="{{entry.textEditorSimple|striptags}}"></div></div> --> #}
+<div class="invisible"><div class="sharethis-inline-share-buttons"></div></div>
+{%- set getstarted = craft.entries.section('callToActionMarketing').slug('get-started').one() -%}
+{%- if getstarted is not empty -%}
+	{%- include "_marketing/_includes/cta2" with {cta:getstarted}-%}		
+{%- endif -%}	
+{%js%}
+	$(function(){
+		$(".mealadded-count-click").unbind("click");
+		$(".mealadded-count-click").on("click",function(e){
+			e.preventDefault();
+			toggleConfirm("Please create your FREE account to change servings and activate your shopping list creator ");
+			$(".delrecipe-msgdiv h5").addClass("d-none");
+			$("a#delete-fav").text("CREATE NOW");
+			$("a#delete-fav").unbind("click");
+			$("a#delete-fav").on("click",function(e){
+				e.preventDefault();
+				window.location="https://www.app.transformationcookbook.com/account/registration";			
+			})
+		})
+		$('.delrecipecancel-btn').on('click',function(event){
+		  $('.delrecipe-popupsection:not(.custom-alert)').removeClass('active');
+		  $('body').removeClass('delrecipe-fixed');
+		  $('.delrecipe-msgdiv h5').removeClass('d-none');
+		}); 
+	})	
+{%endjs%}
+{% endblock %}
+{% js "/_marketing/js/general.js" %}

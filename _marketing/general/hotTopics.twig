@@ -1,0 +1,66 @@
+{%css "/vendor/fancybox3/jquery.fancybox.min.css" %}
+{% import '_macros' as tcbMacro %}
+<section class="lowcalories-title-section">
+<div class="container">
+<div class="row">
+	<div class="col-md-12">
+		{{entry.textEditorFull}}
+	</div>
+</div>
+</div>
+</section>
+{%- set hotFree = craft.entries
+	.section(['hotTopics','hotTopicVideos'])
+	.with([
+		['listImage',{
+			withTransforms:['resizeTo400px']
+		}],
+		'videoType'
+	]).orderBy('postDate desc').all()-%}
+
+{%- set totalHot = hotFree|length -%}
+{%- if totalHot|length > 0 -%}
+<section class="lowcalories-listsection" oncopy="Copyright.showContext();return false;">
+<div class="container">
+<div class="row">
+	{%- set ctr = 0 -%}
+	{%- if hotFree is not empty -%}
+		{%- for i in hotFree -%}
+			{%- if ctr == 8 and totalHot > 8 -%}
+				<section class="lowcalories-listsection" oncopy="Copyright.showContext();return false;"><div class="container"><div class="row">
+			{%- endif -%}
+			<div class="col-md-4 col-sm-6 lowcal-col">
+				{%-if i.section == 'Hot Topics'-%}
+						{{tcbMacro.hotTopicList(i,'1','resizeTo400px','0','0')}}					 
+				{%-elseif i.section == 'Hot Topic Videos'-%}
+					{%- set v = i.videoType[0] ?? null-%}
+					{%- if v -%}									
+						{{tcbMacro.videoList(i, v, '0',loop.index,'','0')}}	
+					{%- endif -%}
+				{%-endif-%}
+			</div>
+			{%- set ctr = ctr + 1-%}
+			{%- if ctr == 8  and totalHot > 8-%}
+				</div></div></section>
+				{%- include "_marketing/general/_partials/page-modules" with {entry:entry}-%}
+			{%- elseif ctr == totalHot and totalHot > 8-%}
+				</div></div></section>
+			{%- endif -%}
+		{%- endfor -%}
+	{%- endif -%}
+
+
+	{%- if totalHot <= 8 -%}
+		</div></div></section>
+		{%- include "_marketing/general/_partials/page-modules" with {entry:entry}-%}
+	{%- endif -%}
+
+{%- endif -%}
+{% js "/js/bind.polyfill.js" %}
+{% js "/js/tocca.min.js" %}
+{% js "/vendor/fancybox3/jquery.fancybox.min.js" %}
+{%js%}
+	$(function(){
+		$(".various").fancybox();
+	})	
+{%endjs%}

@@ -1,0 +1,126 @@
+{%- extends "_layout_onboarding" -%}
+{%block main %}
+
+{% requireLogin %}
+{% set user = user ?? currentUser %}
+
+{%- if user.lightswitch3 and user.number is not empty and user.lightswitch1 -%}
+	{% redirect "/home" %}
+{%- elseif user.lightswitch3 -%}	
+	{% redirect alias('@tcbapp') ~ "?ob=3" %}
+{%- else -%}	
+	{%- set selectedDiets = [] -%}
+	{%- set userDiets = user.diets.all() -%}
+	{%- if userDiets is not empty -%}
+		{%- for i in userDiets-%}
+			{% set selectedDiets = selectedDiets|merge([i.id]) %}
+		{%- endfor -%}
+	{%- endif -%}	
+	
+		<div class="page-wrapper">
+		<header class="site-header mygroceries-header d-lg-none">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="header-innerwrap">
+							<div class="logo-div">
+								<a href="/">
+									<img src="/images/TCB-icon.svg" alt="TCB" class="tbl-logo">
+								</a>
+							</div>
+							<!-- div class="head-rightside">
+								<div class="setting-div">
+									<a href="javascript:void(0);" class="setting-s-icondiv">s</a>
+								</div>
+							</div -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="account-preference-wrap diet-wrap">
+			<div class="accpre-image">
+				{%- set img = '' -%}
+				{%- if onboarding.listImage is not empty and onboarding.listImage.one() is not null -%}
+					{%- set img = onboarding.listImage.one() -%}
+					{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+				{%- endif -%}
+				<div class="accpre-bg" {%if img is not empty %}style="background-image: url({{img.url}});background-position:{{bgPosition}}"{%endif%}>
+					<div class="b-sign"></div>
+				</div>
+			</div>
+			<div class="accpre-content">
+				<div class="bubblebg-wrap">		
+					<div class="bubble b-sm x15"></div>		    
+				    <!-- div class="bubble b-sign x1"></div -->
+				    <div class="bubble b-lg x2"></div>
+				    <div class="bubble b-lg x3"></div>
+				    <div class="bubble b-sm x4"></div>
+				    <div class="bubble b-md x5"></div>
+				    <div class="bubble b-sm x6"></div>
+				    <div class="bubble b-sm x8"></div>
+				    <div class="bubble b-md x9"></div>
+				    <div class="bubble b-exlg x10"></div>
+				    <div class="bubble b-md x11"></div>
+				    <div class="bubble b-lg x12"></div>
+				    <div class="bubble b-sm x13"></div>
+				    <div class="bubble b-exlg x14"></div>
+				</div>
+				<div class="accpre-content-inner">
+					<div class="bubble b-sign"></div>
+					<h3>Select your diet preferences</h3>
+					{% macro errorList(errors) %}
+					  {% if errors %}
+						{{ ul(errors, {class: 'errors'}) }}
+					  {% endif %}
+					{% endmacro %}
+					{% if user.hasErrors() %}
+					  <p style="color: #FFF;margin-bottom:20px;background: #FF0000;padding: 10px 20px;border-radius: 6px;">Unable to save your profile.</p>
+					{% endif %}
+					<form name="diet-preferences" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+					  {{ csrfInput() }}
+					  {{ actionInput('users/save-user') }}
+					  {{ hiddenInput('userId', user.id) }}
+					  {# {{ redirectInput("/account/registration-preferences-people") }} #}
+					   {{ redirectInput(alias('@tcbapp') ~ "?ob=3") }}
+					  {{ _self.errorList(user.getErrors('diets')) }}
+					  <input type="hidden" name="fields[lightswitch3]" value="1">
+					<ul class="accpre-diet-list">
+						{%- set diets = craft.categories.group('diets').all() -%}
+						{%- set ctr = 0 -%}
+						{%- if diets is not empty -%}
+						 {%- for i in diets -%}
+							<li>
+								<input type="checkbox" name="fields[diets][]" class="diet-preference-option" value="{{i.id}}" {%if i.id in selectedDiets%}checked{%endif%} style="display:none;" />
+								<a href="javascript:void(0);" class="diet-preference">
+									<div class="accpre-diet-boxdiv">
+										<div class="round-cat" id="round-{{ctr}}">{{i.textbox}}</div>
+										<h4>{{i.title}}</h4>
+										<div class="cat-chekbox">
+											<span class="plus-sign"></span>
+										</div>
+									</div>
+								</a>
+							</li>
+							{%-css-%}
+								#round-{{ctr}}{
+									border-color:{{i.colourTheme}};
+									color: {{i.colourTheme}};
+								}
+							{%-endcss-%}
+							{%- set ctr = ctr + 1 -%}
+						 {%- endfor -%}
+						 {%- endif -%}
+					</ul>
+					</form>
+				</div>
+				<div class="accpre-nextbtn-div">
+					<a href="#" class="defult-btn pink-bg" id="submit-diet-preferences">Next</a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+{%- endif -%}
+{%endblock%}

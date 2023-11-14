@@ -1,0 +1,36 @@
+<section class="home-whatmeal-section">
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<div class="accpre-content-inner">
+<h3>What meal are you looking for? </h3>
+{%- set meals = craft.categories.group('meals')
+	.with([
+		['image',{
+			withTransforms:['resizeTo300px']
+		}]
+	]).all() -%}
+{%- if meals is not empty -%}								
+<ul class="accpre-category-list d-flex flex-wrap justify-content-center">
+	{%- for i in meals -%}
+	<li>
+		<a href="/recipes/list?mid={{i.id}}">
+			<div class="accpre-category-img">
+				{%- set img = i.image[0] ?? null-%}
+				{%- if img -%}
+				<img src="{{img.getUrl('resizeTo300px')}}" alt="image" />
+				{%- endif -%}
+			</div>
+			<div class="accpre-category-boxdiv">
+				<h4>{{i.title}}</h4>
+			</div>
+		</a>
+	</li>
+	{%- endfor -%}
+</ul>
+{%- endif -%}
+</div>
+</div>
+</div>
+</div>
+</section>

@@ -1,0 +1,29 @@
+<section class="filterside-section upgrade-pro-form">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="slidertop-courve"><div class="bubble b-sign"></div></div>
+	<div class="slidercenter-courve"></div>
+	<div class="sliderbtm-courve"></div>
+	<!--<h3 class="title-filter">Upgrade to PRO</h3>-->
+	{{ craft.freeform.form("tCBProAccount", {
+			overrideValues: {
+				firstName: user.firstName,
+				lastName: user.lastName,
+				email: user.email,						
+			},			
+		}).render() }}
+	{#<button class="filter-btn">apply</button>#}
+	<ul class="filter-social">
+		{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+		{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+	</ul>
+	{%if isDesktop == 1%}
+	<div class="bubblebg-wrap filter-bubble">		
+		<div class="bubble b-sm x122 yellow"></div>		    
+		<div class="bubble b-md x922 pink"></div>
+		<div class="bubble b-sm x1522 skin"></div>
+		<div class="bubble b-md x822 green"></div>
+		<div class="bubble b-lg x522 yellow-big"></div>
+	</div>
+	{%- endif -%}
+</section>
+

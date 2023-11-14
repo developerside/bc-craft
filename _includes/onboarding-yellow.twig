@@ -1,0 +1,90 @@
+<div class="page-wrapper">
+	<div class="onboarding-wrap onboarding-three shopping-lists">
+		<div class="onboarding-image">
+			<div class="bubblebg-wrap">		
+				<div class="bubble yellow-dot b-sm x15"></div>		    
+				<!-- div class="bubble yellow-dot b-sign x1"></div -->
+				<div class="bubble yellow-dot b-lg x2"></div>
+				<div class="bubble yellow-dot b-lg x3"></div>
+				<div class="bubble yellow-dot b-sm x4"></div>
+				<div class="bubble yellow-dot b-md x5"></div>
+				<div class="bubble yellow-dot b-sm x6"></div>
+				<div class="bubble yellow-dot b-sm x8"></div>
+				<div class="bubble yellow-dot b-md x9"></div>
+				<div class="bubble yellow-dot b-exlg x10"></div>
+				<div class="bubble yellow-dot b-md x11"></div>
+				<div class="bubble yellow-dot b-lg x12"></div>
+				<div class="bubble yellow-dot b-sm x13"></div>
+				<div class="bubble yellow-dot b-exlg x14"></div>
+			</div>
+			<div class="onboarding-image-content">
+				<div class="onboarding-relative hide-on-mobile">
+					<div class="bubble yellow-dot b-sign"></div>
+					<div class="onboarding-icondiv" {% if block.image is not empty and block.image.one() is not null and block.fillImageCircle%}style="background-image:url({{block.image.one().getUrl('onboardingIcon')}});background-size:cover;background-position:center;"{%endif%}>
+						{% if block.image is not empty and block.image.one() is not null and not block.fillImageCircle%}
+						<img src="{{block.image.one().getUrl('onboardingIcon')}}" alt="Icon" />
+						{%- endif -%}
+					</div>
+					<h3>{{block.titlex}}</h3>
+				</div>
+				<div class="mobile-onboarding-content onboarding-relative">
+					<div class="bubble yellow-dot b-sign"></div>
+					{{block.descriptionx}}
+				</div>
+				<div class="onboarding-readmore d-lg-none">
+					<a href="javascript:void(0)" class="plus">read more<span class="icon"></span></a>
+					<a href="javascript:void(0)" class="minus">close<span class="icon"></span></a>
+				</div>
+				<div class="onboarding-nextbtn-div tbl-show">
+					{%js%}
+						console.log("next = {{nextob}} tob = {{tob}}")
+					{%endjs%}
+					{%- if nextob <= tob -%}
+						{%- if user.number is empty -%} {# NUMBER OF PEOPLE NOT YET SELECTED #}
+							<a href="/account/registration-preferences-people" class="defult-btn pink-bg">Next</a>
+						{%- else -%}
+							<a href="{{siteUrl}}?ob={{nextob}}" class="defult-btn pink-bg">Next</a>
+						{%- endif -%}
+					{%- else -%}
+						{%- if user.number is empty -%} {# NUMBER OF PEOPLE NOT YET SELECTED #}
+							<a href="/account/registration-preferences-people" class="defult-btn pink-bg">Next</a>
+						{%- else -%}
+							<a href="#" class="defult-btn pink-bg save-onboarding">Next</a>
+						{%- endif -%}
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
+		<div class="onboarding-content">			
+			<div class="onboarding-content-inner">
+				<div class="logosign-iconbg">
+					<img src="/images/sign-icon-white.svg" alt="image" />
+				</div>	
+				<img src="/images/TCB-logo-pink.png?v=5" alt="TCB" />
+				<div class="ob-inner-text">
+					<div class="aligner ob-inner-top"></div>
+					<div class="aligner ob-inner-middle">{{block.descriptionx}}</div>
+					<div class="aligner ob-inner-bottom"></div>
+				</div>
+			</div>
+			<div class="onboarding-nextbtn-div">
+				{%- if nextob <= tob -%}
+					{%- if user.number is empty -%} {# NUMBER OF PEOPLE NOT YET SELECTED #}
+						<a href="/account/registration-preferences-people" class="defult-btn pink-bg">Next</a>
+					{%- else -%}
+						<a href="{{siteUrl}}?ob={{nextob}}" class="defult-btn pink-bg">Next</a>
+					{%- endif -%}
+				{%- else -%}
+					{%- if user.number is empty -%} {# NUMBER OF PEOPLE NOT YET SELECTED #}
+						<a href="/account/registration-preferences-people" class="defult-btn pink-bg">Next</a>
+					{%- else -%}
+						<a href="#" class="defult-btn pink-bg save-onboarding">Next</a>
+					{%- endif -%}
+				{%- endif -%}
+			</div>
+			<div class="dotsign-iconbg">
+				<img src="/images/dot-bg-r.svg" alt="image" />
+			</div>
+		</div>
+	</div>
+</div>

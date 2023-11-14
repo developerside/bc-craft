@@ -1,0 +1,185 @@
+{%- extends "_marketing/_layout"-%}
+{%html at head%}
+{% sproutseo 'optimize' %}
+{%endhtml%}
+{%- block head-%}
+	<link href="/_marketing/css/home.css?v=3" type="text/css" rel="stylesheet" /> 
+{%- endblock -%}
+{%- block main -%}
+{% import '/_marketing/_macros' as tcbMacro %}
+<section class="homerbanner-section">
+<div class="homebanner-slider">
+	{%- if entry.heroSlider is not empty -%}
+		{%- for block in entry.heroSlider.all() -%}
+			<div>
+				<div class="banner-slidediv">
+					{%- set img ='' -%}				
+					{%- set bgPosition = '' -%}
+					{%- if block.image is not empty and block.image.one() is not null-%}
+						{%- set img = block.image.one() -%}		
+						{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+						{%- set img = img.getUrl('resizeTo1920px')-%}
+					{%- endif -%}
+					<div class="banner-bgdiv" {%if img is not empty%}style="background-image: url({{img}});background-position:{{bgPosition}}"{%endif%}></div>
+					<div class="banner-content">
+						{%- if block.heading is not empty -%}
+						<div class="banner-title">
+							{{block.heading|nl2br|raw}}
+						</div>
+						{%- endif -%}
+						{%- if block.subHeading is not empty -%}
+						<h3>{{block.subHeading}}</h3>
+						{%- endif -%}
+						
+						{{tcbMacro.button(block,'defult-btn pink-bg')}}	
+					</div>
+				</div>
+			</div>
+		{%- endfor -%}
+	{%- endif -%}
+</div>
+<div class="homerbanner-iconover">
+	<img src="/_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB" />
+</div>
+</section>
+
+{%- if entry.homeContents is not empty -%}
+	{%- for i in entry.homeContents.all() -%}
+		{%- switch i.type -%}
+			{%- case "module1" -%}
+				<section class="daily-inspiration" oncopy="Copyright.showContext();return false;">
+					<div class="container">
+						<div class="row">
+						   <div class="col-lg-6 col-md-12">
+							  <div class="img-daily-inspiration animation-element">
+									{%- if i.phoneAnimationImage is not empty and i.phoneAnimationImage.one() is not null -%}
+									<img src="{{i.phoneAnimationImage.one().url}}" alt="TCB" />
+									{%- endif -%}
+							  </div>
+						   </div>
+						   <div class="col-md-12 col-lg-6">
+							   <div class="daily-inspiration-content animation-element">
+									<div class="daily-tcbicon">
+										<img src="/_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB" />
+									</div>
+									<h4>{{i.paragraph}}</h4>																		
+									{{tcbMacro.button(i,'defult-btn pink-bg')}}															
+							   </div>
+						   </div>
+					   </div>
+					</div>
+					</section>
+			{%- case "module2" -%}
+				<section class="nutritious receipes" oncopy="Copyright.showContext();return false;">
+				<div class="nutritious-bgdiv">
+					{%- set bgleft = (i.backgroundImageLeftDessktop is not empty and i.backgroundImageLeftDessktop.one() is not null) ? i.backgroundImageLeftDessktop.one().url : '' -%}
+					{%- set bgright = (i.backgroundImageRightDesktop is not empty and i.backgroundImageRightDesktop.one() is not null) ? i.backgroundImageRightDesktop.one().url : '' -%}
+					{%- set bgleftmobile = (i.backgroundImageLeftMobile is not empty and i.backgroundImageLeftMobile.one() is not null) ? i.backgroundImageLeftMobile.one().url : '' -%}
+					{%- set bgrightmobile = (i.backgroundImageRightMobile is not empty and i.backgroundImageRightMobile.one() is not null) ? i.backgroundImageRightMobile.one().url : '' -%}
+					<div class="desk-left-img" {%if bgleft is not empty%}style="background-image: url({{bgleft}});"{%endif%}></div>
+					<div class="desk-right-img" {%if bgright is not empty%}style="background-image: url({{bgright}}"{%endif%}></div>
+					<div class="mob-left-img" {% if bgleftmobile is not empty%}style="background-image: url({{bgleftmobile}});"{%endif%}></div>
+					<div class="mob-right-img" {%if bgrightmobile is not empty%}style="background-image: url({{bgrightmobile}});"{%endif%}></div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6 col-md-12 nutritious-receipes-col animation-element">
+							{%- if i.phoneAnimationImage is not empty and i.phoneAnimationImage.one() is not null -%}
+							<img src="{{i.phoneAnimationImage.one().url}}" alt="TCB" />
+							{%- endif -%}
+						</div>
+						<div class="col-lg-6 col-md-12 nutritious-receipes-content animation-element">
+						  <div class="nutritious-receipe">
+							  {%if i.heading is not empty%}<h2>{{i.heading}}</h2>{%endif%}
+							  {%if i.subheading is not empty%}<h4>{{i.subheading}}</h4>{%endif%}							  
+							  {{i.paragraph}}
+							  {{tcbMacro.button(i,'defult-btn pink-bg')}}							  	
+						  </div>
+						</div>
+					</div>
+				</div>
+				</section>
+			{%- case "dietModule" -%}
+				<section class="filter-preference-section" oncopy="Copyright.showContext();return false;">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-6 col-md-12 filter-preference-col">
+								<div class="filter-preference-wrapbox animation-element">
+									<ul class="accpre-category-list filter-category-slider">
+										{%- include "_marketing/_includes/diet-icons" -%}										
+									</ul>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-12 filter-preference-content">
+								<div class="content-filter-preference animation-element">
+									<div class="daily-tcbicon">
+										<img src="/_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB" />
+									</div>
+									{%if i.heading is not empty%}<h2>{{i.heading}}</h2>{%endif%}
+									{{i.paragraph}}
+								</div>
+							</div>
+						</div>
+					</div>
+					</section>
+			{%- case "module4" -%}
+				<section class="my-groceries-section" oncopy="Copyright.showContext();return false;">
+					<div class="groceries-bgdiv">
+						{%- set bgleft = (i.backgroundImageLeftDesktop is not empty and i.backgroundImageLeftDesktop.one() is not null) ? i.backgroundImageLeftDesktop.one().url : '' -%}
+					{%- set bgright = (i.backgroundImageRightDesktop is not empty and i.backgroundImageRightDesktop.one() is not null) ? i.backgroundImageRightDesktop.one().url : '' -%}
+					{%- set bgleftmobile = (i.backgroundImageLeftMobile is not empty and i.backgroundImageLeftMobile.one() is not null) ? i.backgroundImageLeftMobile.one().url : '' -%}
+					{%- set bgrightmobile = (i.backgroundImageRightMobile is not empty and i.backgroundImageRightMobile.one() is not null) ? i.backgroundImageRightMobile.one().url : '' -%}
+					<div class="desk-left-img" {%if bgleft is not empty%}style="background-image: url({{bgleft}});"{%endif%}></div>
+					<div class="desk-right-img" {%if bgright is not empty%}style="background-image: url({{bgright}}"{%endif%}></div>
+					<div class="mob-left-img" {% if bgleftmobile is not empty%}style="background-image: url({{bgleftmobile}});"{%endif%}></div>
+					<div class="mob-right-img" {%if bgrightmobile is not empty%}style="background-image: url({{bgrightmobile}});"{%endif%}></div>
+					
+					</div>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-6 col-md-12 animation-element">
+								{%- if i.phoneAnimationImage is not empty and i.phoneAnimationImage.one() is not null -%}
+								<img src="{{i.phoneAnimationImage.one().url}}" alt="TCB" />
+								{%- endif -%}
+							</div>
+							<div class="col-lg-6 col-md-12">
+								<div class="content-my-groceries animation-element">
+									<div class="daily-tcbicon">
+										<img src="/_marketing/images/TCB_Heart_Light_lime.svg" alt="TCB" />
+									</div>
+									{%- if i.heading is not empty -%}<h2>{{i.heading}}</h2>{%- endif -%}
+									
+									{{i.subHeading}}
+									
+									{{tcbMacro.button(i,'defult-btn pink-bg')}}									
+								</div>
+							</div>
+						</div>
+					</div>
+					</section>
+			{%- case "testimonialModule" -%}
+				<section class="hot-topics-section" oncopy="Copyright.showContext();return false;">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="hot-topics-content">
+								{%if i.heading is not empty%}<h2 class="animation-element">{{i.heading}}</h2>{%endif%}
+								{%if i.subHeading is not empty%}<h4 class="animation-element">{{i.subHeading}}</h4>{%endif%}
+								{%if i.paragraph is not empty%}<p class="animation-element">{{i.paragraph}}</p>{%endif%}
+								{{tcbMacro.button(i,'defult-btn pink-bg')}}	
+							</div>
+						</div>
+					</div>
+				</div>
+				</section>
+				{%- include "_marketing/_includes/testimonials"-%}
+			{%- case "callToAction"-%}
+				{%- if i.item is not empty and i.item.one() is not null -%}
+					{%- include "_marketing/_includes/cta2" with {cta:i.item.one()}-%}
+				{%- endif -%}
+		{%- endswitch -%}
+	{%- endfor -%}
+{%- endif -%}
+
+
+{%- endblock -%}

@@ -1,0 +1,51 @@
+<!-- Sidebar diet -->
+<section class="filterside-section dietslidebar-div">
+	<a href="#" class="close-sidebar">Close</a>
+
+	<div class="logo-div">
+		<a href="/home">
+			<img src="/images/tcb-icon.svg" alt="TCB" class="tbl-logo">
+		</a>
+	</div>
+
+	<div class="accpre-content">
+		{%if isDesktop == 1%}
+		<div class="bubblebg-wrap">		
+			<div class="bubble b-sm x1522"></div>		   
+			<div class="bubble b-sm x422"></div>
+			<div class="bubble b-md x522"></div>
+			<div class="bubble b-sm x622"></div>
+			<div class="bubble b-lg x1222"></div>
+			<div class="bubble b-sm x1322"></div>
+		</div>
+		{%- endif -%}
+		<div class="accpre-content-inner">
+			<h3>Select your diet preferences</h3>			
+			<ul class="accpre-diet-list">
+				{%- if diets is not empty -%}
+				 {%- for i in diets -%}
+					<li>
+						{%- set activeClass = '' -%}
+						{%- if dids is not empty and dids != 'all'-%}
+							{%- set activeClass = (i.id in dids) ? 'active' : '' -%}
+						{%-endif-%}
+						<a href="javascript:void(0);" data-value="{{i.id}}" class="diet-preference {{activeClass}}">
+							<div class="accpre-diet-boxdiv">
+								<div class="round-cat" id="diet-icon-{{i.id}}">{{i.textbox}}</div>
+								<h4>{{i.title}}</h4>
+								<div class="cat-chekbox">
+									<span class="plus-sign"></span>
+								</div>
+							</div>
+						</a>
+					</li>					
+				 {%- endfor -%}
+				 {%- endif -%}
+			</ul>
+		</div>
+		<div class="accpre-nextbtn-div">
+			<a href="#" class="defult-btn pink-bg" id="change-diet-display">Apply</a>
+		</div>
+	</div>
+</section>
+<!-- Sidebar diet -->

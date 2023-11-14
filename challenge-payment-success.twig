@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{%- include "_marketing/_includes/headcss"-%}
+<link href="/_marketing/css/general.css" type="text/css" rel="stylesheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RZPH23PGT7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RZPH23PGT7');
+</script>
+</head>
+<body class="page-loader">
+	{%- include "_includes/loader" -%}
+	<div class="page-wrapper">
+		{%- include "_marketing/_includes/header" -%}
+		
+		<section class="tcbwebapp-section" style="background-image: url(/_marketing/images/banner-9.jpg);">
+			<img src="images/passt-icon.svg" alt="Image" class="passt-icon-img">
+			<div class="container">
+			   <div class="row">
+					<div class="col-md-12">
+						<div class="content-tcbwebapp">
+							<h5>Challenge Payment Successful!</h5>
+							<p>Thank you!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		{%- include "_marketing/_includes/footer"-%}
+	</div>
+	<div class="loader"></div>
+	{%- include "_marketing/_includes/footjs"-%}	
+	<script type="text/javascript" src="/_marketing/js/general.js"></script>
+</body>
+</html>

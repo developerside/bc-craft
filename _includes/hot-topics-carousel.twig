@@ -1,0 +1,36 @@
+{%- set hot = craft.entries
+	.section('hotTopics')
+	.with([
+		['listImage',{
+			withTransforms:['resizeTo400px']
+		}]
+	])
+	.limit(8)
+	.orderBy('postDate desc').all()-%}
+{%- if hot is not empty-%}	
+{% import '_macros' as tcbMacro %}
+<section class="doeat-section articles-section">
+<div class="container"><div class="row"><div class="col-md-12"></div></div></div>
+<div class="doeat-title-wrap">	
+<div class="containers">
+<div class="row">		
+<div class="col-md-3 doeat-title {%if isDesktop == 1%}animation-element{%endif%}">	
+<div class="pagetile-div">
+	<h2>Hot Topics</h2>
+	<a href="/hot-topics/list" class="pageviewall-link">VIEW ALL</a>
+</div>
+</div>					
+<div class="col-md-9 doeat-slidewap {%if isDesktop == 1%}animation-element{%endif%}">
+<div class="doeat-slider">
+{%- for i in hot -%}
+	<div>
+	{{tcbMacro.hotTopicList(i,'0','resizeTo400px','0',pro)}}
+	</div>	
+{%- endfor -%}				
+</div>					
+</div>	
+</div>
+</div>				
+</div>
+</section>
+{%- endif -%}

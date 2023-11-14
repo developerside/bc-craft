@@ -1,0 +1,5 @@
+{{campaign.campaignTextEditor|replace({'[Name]': contact.customerName})|raw}}
+<br/>
+{% if unsubscribeUrl %}
+	<a style="font-size: 10px; font-weight: 300; color: #adadad; text-transform: uppercase;font-family: 'Work Sans', sans-serif;" href="{{ unsubscribeUrl }}">Unsubscribe here</a>
+{% endif %}

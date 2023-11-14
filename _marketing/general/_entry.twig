@@ -1,0 +1,20 @@
+{% extends "_marketing/_layout" %}
+{%- block head-%}
+	<link href="/_marketing/css/general.css?v=30" rel="stylesheet">
+{%- endblock -%}
+
+{% block main %}
+	{%- if entry.type == 'recipes'-%}
+		{%- include "_marketing/general/recipes" with {entry:entry}-%}
+		{%- include "_marketing/general/_partials/page-modules" with {entry:entry}-%}
+	{%- elseif entry.type == 'hotTopics'-%}
+		{%- include "_marketing/general/hotTopics" with {entry:entry}-%}
+	{%- elseif entry.type == 'generalPageWithHeader'-%}
+		{%- include "_marketing/general/general-with-header" with {entry:entry}-%}
+	{%- else -%}
+		{%- include "_marketing/general/_partials/page-modules" with {entry:entry}-%}
+	{%- endif -%}
+	
+{% endblock %}
+
+{% js "/_marketing/js/general.js" %}

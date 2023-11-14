@@ -1,0 +1,80 @@
+{%- extends "_marketing/_layout"-%}
+{% html at head %}
+	<title>Plans - Transformation Cook Book</title>
+{% endhtml %}
+{%- block main -%}
+
+<section class="select-your-plan-section">
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="content-select-your-plan">
+				<h2>Select Your Plan</h2>
+				<p>PLEASE SELECT YOUR SUBSCRIPTION TYPE</p>
+			</div>
+		</div>
+	</div>
+	<div class="row plan-row"> 
+		<div class="col-md-6">
+			<div class="round-box-annual annual-plan">
+				<div class="round-box-plan">
+					<p>{{planGlobals.textbox}}</p>
+					<h3>{{planGlobals.textbox11}}</h3>
+					<p><span>{{planGlobals.textbox2}}</span></p>
+				</div>
+				<div class="roundbox-content">
+					<p>{{planGlobals.textbox3}}</p>
+				</div>		                    
+				<div class="btn-select">
+					<div class="roundbox-save">
+						<p>{{planGlobals.textbox4|replace({' ':'<br/>'})|raw}}</p>
+					</div>
+					<a href="/select-your-plan/paymentm?s=annually" class="defult-btn">SELECT</a>
+				</div>
+			</div>
+		</div> 
+
+		<div class="col-md-6">
+			<div class="round-box-annual">
+				<div class="round-box-plan">
+					<p>{{planGlobals.textbox6}}</p>
+					<h3>{{planGlobals.textbox12}}</h3>
+					<p><span>{{planGlobals.textbox7}}</span></p>
+				</div>
+				<div class="roundbox-content">
+					<p>{{planGlobals.textbox8}}</p>
+				</div>
+					{%- if planGlobals.textbox9 is not empty -%}
+						<div class="roundbox-save">
+						<p>{{planGlobals.textbox9|replace({' ':'<br/>'})|raw}}</p>
+					</div>
+					{%-endif-%}
+				<div class="btn-select">
+					<a href="/select-your-plan/paymentm?s=monthly" class="defult-btn">SELECT</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+
+<section class="included-section">
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="image-include">
+				<img src="/_marketing/images/include-image.png" alt="Image" class="desk-img" />
+				<img src="/_marketing/images/elevate-your-cooking.png" alt="Image" class="mob-img" />
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="content-include">
+				{{planGlobals.textEditorFull}}
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+
+{%- endblock -%}
+{% js "/_marketing/js/general.js" %}

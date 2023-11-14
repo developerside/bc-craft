@@ -1,0 +1,39 @@
+<section class="filterside-section markedcooked-section">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="markedcooked-content">
+		<div class="markedcooked-titlediv">
+			<h2>Mark as Cooked</h2>
+			<p>&nbsp;</p>
+			<p>Removes this recipe from your Groceries list</p>
+		</div>
+		<div class="markedcooked-recipeproduct">
+			<h4>recipe</h4>
+			<div class="side-grocery-info">
+				<div class="grocery-item">
+					<div class="grocery-item-image">
+						
+					</div>
+					<p class="recipe-title">Recipe Title goes here may have two lines or more</p>
+				</div>
+			</div>	
+			<div class="undo-groceries-linkdiv">
+				<a href="#" class="undo-link undo-mark-cook" data-title="{{entry.title}}" data-id="{{entry.id}}">Undo</a>
+				<br>
+				<a href="/groceries" class="groceries-link">view groceries</a>
+			</div>
+		</div>		
+		<ul class="filter-social">
+			{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+			{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+		</ul>
+	</div>
+	<form name="mark-cooked" method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="d-none">
+	  {{ csrfInput() }}
+	  {{ actionInput('users/save-user') }}
+	  {{ hiddenInput('userId', user.id) }}
+	  <input type="hidden" name="fields[cookedRecipes]" value="">
+	  {%- for i in usercookedRecipes -%}
+		<input type="checkbox" name="fields[cookedRecipes][]" value="{{i.id}}" checked/>
+	  {%- endfor -%}	  
+	</form>
+</section>

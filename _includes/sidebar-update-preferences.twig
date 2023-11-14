@@ -1,0 +1,181 @@
+{# ================= FORMS BELOW WILL UPDATE USER'S 3 PREFERENCES #}
+
+<!-- Sidebar count number section -->
+<section class="filterside-section countpeople-section user-preference">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="slidertop-courve">
+		<div class="bubble b-sign"></div>
+	</div>
+	<div class="slidercenter-courve"></div>
+	<div class="sliderbtm-courve"></div>
+	<div class="countpeople-content">
+		<h3>How many people will you be cooking for?</h3>
+		<a href="javascript:void(0);" class="countpeople-donebtn countpeople-update">Update</a>
+		<ul class="filter-list-ul">
+			<li><a class="people-num-preference {%if user.number == 1%}active{%endif%}" href="#">1</a></li>
+			<li><a class="people-num-preference {%if user.number == 2%}active{%endif%}" href="#">2</a></li>
+			<li><a class="people-num-preference {%if user.number == 3%}active{%endif%}" href="#">3</a></li>
+			<li><a class="people-num-preference {%if user.number == 4%}active{%endif%}" href="#">4</a></li>
+			<li><a class="people-num-preference {%if user.number == 5%}active{%endif%}" href="#">5</a></li>
+			<li><a class="people-num-preference {%if user.number == 6%}active{%endif%}" href="#">6</a></li>
+			<li><a class="people-num-preference {%if user.number == 7%}active{%endif%}" href="#">7</a></li>
+			<li><a class="people-num-preference {%if user.number == 8%}active{%endif%}" href="#">8</a></li>
+			<li><a class="people-num-preference {%if user.number == 9%}active{%endif%}" href="#">9</a></li>			
+			<li><a class="people-num-preference {%if user.number == 10%}active{%endif%}" href="#">10</a></li>
+			<li><a class="people-num-preference {%if user.number == 11%}active{%endif%}" href="#">11</a></li>
+			<li><a class="people-num-preference {%if user.number == 12%}active{%endif%}" href="#">12</a></li>
+			<li><a class="people-num-preference {%if user.number == 13%}active{%endif%}" href="#">13</a></li>
+			<li><a class="people-num-preference {%if user.number == 14%}active{%endif%}" href="#">14</a></li>
+			<li><a class="people-num-preference {%if user.number == 15%}active{%endif%}" href="#">15</a></li>
+			<li><a class="people-num-preference {%if user.number == 16%}active{%endif%}" href="#">16</a></li>
+			<li><a class="people-num-preference {%if user.number == 17%}active{%endif%}" href="#">17</a></li>
+			<li><a class="people-num-preference {%if user.number == 18%}active{%endif%}" href="#">18</a></li>
+			<li><a class="people-num-preference {%if user.number == 19%}active{%endif%}" href="#">19</a></li>
+			<li><a class="people-num-preference {%if user.number == 20%}active{%endif%}" href="#">20</a></li>
+			<li><a class="people-num-preference {%if user.number == 21%}active{%endif%}" href="#">21</a></li>
+			<li><a class="people-num-preference {%if user.number == 22%}active{%endif%}" href="#">22</a></li>
+			<li><a class="people-num-preference {%if user.number == 23%}active{%endif%}" href="#">23</a></li>
+			<li><a class="people-num-preference {%if user.number == 24%}active{%endif%}" href="#">24</a></li>
+		</ul>			
+	</div>			
+	<ul class="filter-social">
+		{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+		{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+	</ul>
+	{%if isDesktop == 1%}
+	<div class="bubblebg-wrap filter-bubble">		
+		<div class="bubble b-sm x122 yellow"></div>		    
+		<div class="bubble b-md x922 pink"></div>
+		<div class="bubble b-sm x1522 skin"></div>
+		<div class="bubble b-md x822 green"></div>
+		<div class="bubble b-lg x522 yellow-big"></div>
+	</div>
+	{%- endif -%}
+	<form name="people-preferences" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+	{{ csrfInput() }}
+	{{ actionInput('users/save-user') }}
+	{{ hiddenInput('userId', user.id) }}
+	<input type="hidden" name="fields[number]" class="num-people">					  
+	</form>
+</section>
+	<!-- Sidebar count number section End -->
+	
+	<!-- Sidebar diet -->
+<section class="filterside-section dietslidebar-div user-preference">
+	<a href="#" class="close-sidebar">Close</a>
+
+	<div class="logo-div">
+		<a href="/home">
+			<img src="/images/tcb-icon.svg" alt="TCB" class="tbl-logo">
+		</a>
+	</div>
+
+	<div class="accpre-content">
+		{%if isDesktop == 1%}
+		<div class="bubblebg-wrap">		
+			<div class="bubble b-sm x1522"></div>		   
+			<div class="bubble b-sm x422"></div>
+			<div class="bubble b-md x522"></div>
+			<div class="bubble b-sm x622"></div>
+			<div class="bubble b-lg x1222"></div>
+			<div class="bubble b-sm x1322"></div>
+		</div>
+		{%endif%}
+		<div class="accpre-content-inner">
+			<h3>Update your diet preferences</h3>			
+			<ul class="accpre-diet-list">
+				<form name="update-diet-preferences" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+					  {{ csrfInput() }}
+					  {{ actionInput('users/save-user') }}
+					  {{ hiddenInput('userId', user.id) }}
+					  {{ redirectInput("/account/registration-preferences-people") }}
+				{%- if diets is not empty -%}				
+				 {%- for i in diets -%}
+					<li>
+						{%- set activeClass = (i.id in selectedDiets) ? 'active' : '' -%}
+						<input type="checkbox" name="fields[diets][]" class="diet-preference-option" value="{{i.id}}" {%if i.id in selectedDiets%}checked{%endif%} style="display:none;" />
+						<a href="javascript:void(0);" data-value="{{i.id}}" class="diet-preference {{activeClass}}">
+							<div class="accpre-diet-boxdiv">
+								<div class="round-cat" id="diet-icon-{{i.id}}">{{i.textbox}}</div>
+								<h4>{{i.title}}</h4>
+								<div class="cat-chekbox">
+									<span class="plus-sign"></span>
+								</div>
+							</div>
+						</a>
+					</li>					
+				 {%- endfor -%}				
+				 {%- endif -%}
+				  </form>
+			</ul>
+		</div>
+		<div class="accpre-nextbtn-div">
+			<a href="#" class="defult-btn pink-bg" id="update-diet-preference-sidebar">Update</a>
+		</div>
+	</div>
+	
+</section>
+<!-- Sidebar diet -->
+
+ 
+<!-- Sidebar Meal -->
+<section class="filterside-section mealslidebar-div user-preference">
+	<a href="#" class="close-sidebar">Close</a>
+
+	<div class="logo-div">
+		<a href="/home">
+			<img src="/images/tcb-icon.svg" alt="TCB" class="tbl-logo">
+		</a>
+	</div>
+
+	<div class="accpre-content">
+		{%if isDesktop == 1%}
+		<div class="bubblebg-wrap">		
+			<div class="bubble b-sm x1522"></div>		   
+			<div class="bubble b-sm x422"></div>
+			<div class="bubble b-md x522"></div>
+			<div class="bubble b-sm x622"></div>
+			<div class="bubble b-lg x1222"></div>
+			<div class="bubble b-sm x1322"></div>
+		</div>
+		{%endif%}
+		<div class="accpre-content-inner">
+			<h3>Update your meal preferences </h3>			 
+			 {%- if allmeals is not empty -%}
+			 <form name="update-meal-preferences" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+			  {{ csrfInput() }}
+			  {{ actionInput('users/save-user') }}
+			  {{ hiddenInput('userId', user.id) }}
+				<ul class="accpre-category-list meals-circle">
+				{%- for i in allmeals -%}
+					<li>	
+						{%- set activeClass = (i.id in selectedMeals) ? 'active' : '' -%}						
+						<input type="checkbox" name="fields[mealCategories][]" class="meal-preference-option" value="{{i.id}}" {%if i.id in selectedMeals%}checked{%endif%} style="display:none;" />
+						<a href="javascript:void(0);" class="select-meal-preference-sidebar meal-select {{activeClass}}"  data-value="{{i.id}}">
+							<div class="accpre-category-img">
+								{%- set img = i.image[0] ?? null -%}
+								{%- if img -%}
+								<img src="{{img.getUrl('resizeTo300px')}}" alt="image" />
+								{%- endif -%}
+							</div>
+							<div class="accpre-category-boxdiv">
+								<h4>{{i.title}}</h4>
+								<div class="cat-chekbox">
+									<span class="plus-sign"></span>
+								</div>
+							</div>
+						</a>
+					</li>
+				{%- endfor -%}				
+			</ul>
+			</form>
+			{%- endif -%}
+		</div>
+		<div class="accpre-nextbtn-div">
+			<a href="#" class="defult-btn pink-bg" id="update-meal-preference-sidebar">Update</a>
+		</div>
+	</div>
+	
+	
+</section>
+<!-- Sidebar diet -->

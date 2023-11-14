@@ -1,0 +1,101 @@
+{# <!--
+{%- if 'select-your-plan/payment' not in craft.app.request.pathInfo-%}
+<section class="become-friend-section">
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+{%if siteSettings.textbox4 is not empty%}<h2 class="animation-element">{{siteSettings.textbox4}}</h2>{%endif%}
+<div class="animation-element">
+{{siteSettings.textEditorSimple4}}
+</div>
+{%- if siteSettings.subscribeToMailingListMarketing is not empty and siteSettings.subscribeToMailingListMarketing.one() is not null -%}
+	{% set contact = contact ?? create('putyourlightson\\campaign\\elements\\ContactElement') %}
+	<div class="become-friend-form animation-element">
+		<form id="subscribe-form" method="post" action="" onsubmit="return checkSubscribe()">
+		{{ csrfInput() }}
+		<input type="hidden" name="action" value="campaign/forms/subscribe" />
+		<input type="hidden" name="mailingList" value="{{ siteSettings.subscribeToMailingListMarketing.one().slug }}" />
+	   {{ redirectInput('/subscription-success-mk')}}	  
+		<input type="email" id="subscriberEmail" name="email" placeholder="Email Address" class="form-control" required style="margin-bottom:15px;"  autocomplete="off"/>
+		{{ contact.getFirstError('email') }}
+		<input type="text" id="subscriberName" name="fields[customerName]" placeholder="Name" class="form-control" required autocomplete="off"/>
+		{{ contact.getFirstError('customerName') }}
+		{{ craft.campaign.recaptcha }}
+		<input type="submit" id="submit-subscribe" value="SIGN UP" name="" class="defult-btn pink-bg" />					
+		</form>					
+	</div>
+	{%js%}
+		function checkSubscribe(){
+			if($("form#subscribe-form").find("#g-recaptcha-response").val() == ''){
+				alert("Please prove you are not a robot");
+				return false;
+			}else{
+				$("form#subscribe-form").submit();
+				return false;
+			}
+		}				
+	{%endjs%}
+{%- endif -%}
+</div>
+</div>
+</div>
+</section>
+{%endif%}
+
+--> #}
+{%css%}
+	.yt-foot-icon{position:relative;}
+	.yt-foot-icon svg{position:absolute;bottom:-5px;}
+	.yt-foot-icon svg path, .yt-foot-icon:hover svg path{fill:#FFF !important;}
+{%endcss%}
+<footer class="site-footer">
+	<div class="footer-logo">
+		<a href="/">
+			<img src="/_marketing/images/TCB-logo-white-marketing.png?v=3" alt="TCB" />
+		</a>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="footer-social">
+					{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="Facebook - Transforamtion Cookbook"></a></li>{%endif%}
+					{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="Instagram - Transforamtion Cookbook"></a></li>{%endif%}
+					<li><a href="https://www.tiktok.com/@sharlenesault1" target="_blank" class="tiktok-foot-icon"><img src="/images/tiktok-icon-sm.png" alt="Tiktok - Transforamtion Cookbook"></a></li>
+					<li><a href="https://www.youtube.com/channel/UCTyp7a0r28RfmJsz-DfbYsQ" target="_blank" class="svg-fill yt-foot-icon"><img src="/images/Youtube_button.svg" alt="Youtube - Transforamtion Cookbook"></a></li>
+					
+				</ul>
+				<p>&copy; {{now|date('Y')}} TCB. All rights reserved</p>
+				<p class="footer-links">
+					{%- if siteSettings.footerLinks is not empty -%}					
+						{%- for block in siteSettings.footerLinks.all() -%}
+							{%- set thelink = '' -%}
+							{%- set thetarget = ''-%}
+							{%- set linktext = (block.linkText is not empty) ? block.linkText : '' -%}
+							{%- if block.linkx is not empty -%}
+								{%- for lnk in block.linkx.all()-%}
+									{%- if lnk.addLink is not empty -%}
+										
+										{%- for a in lnk.addLink.all() -%}
+											{%- if a.type == 'internal'-%}
+												{%- set thelink = (a.item is not empty and a.item.one() is not null) ? a.item.one().url : ''-%}
+											{%- elseif a.type == 'external'-%}
+												{%- set thelink = (a.linkurl is not empty) ? a.linkurl : ''-%}
+												{%- set thetarget = 'target="_blank"'-%}
+											{%- elseif a.type == 'asset'-%}
+												{%- set thelink = (a.assetFile is not empty and a.assetFile.one() is not null) ? a.assetFile.one().url : '' -%}
+												{%- set thetarget = 'target="_blank"'-%}
+											{%- endif -%}
+										{%- endfor -%}
+									{%- endif -%}
+								{%- endfor -%}
+							{%- endif -%}
+							{%if thelink is not empty and linktext is not empty%}<a href="{{thelink}}" {{thetarget}}>{{linktext}}</a>{%endif%}
+						{%- endfor -%}			
+					{%- endif -%}
+				</p>
+				<p>{{siteSettings.textEditorSimple}}</p>
+				{# <p>App Design & website by <a href="https://www.jwamdigital.com.au/" target="_blank"><img src="/images/jwam-icon.svg" alt="instagram" /></a></p> #}
+			</div>
+		</div>
+	 </div>
+</footer>

@@ -1,0 +1,309 @@
+{% macro recipeList(i, displayImg, hasBottom, transformImg, isfav, pro, isFavList) %}
+{% set user = user ?? currentUser %}
+{%- set img = '' -%}
+{%- set bgPosition = '' -%}
+{%- set img = i.listImage[0] ?? null -%}
+{%- if img -%}
+	{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+{%- endif -%}
+{%- set recipeUrl = i.url -%}
+{%- set recipeApp = '' -%}
+{%- if isFavList == 1-%}
+	{%- set recipeApp = craft.entries.siteId(1).section('recipes').id(i.id).one() -%}
+	{%- set recipeUrl = recipeApp.url -%}
+{%- endif -%}
+	
+
+<div class="fav-recipes-boxdiv" data-pro="{{pro}}">
+	<div class="fav-recipe-bgdiv">	
+		
+		{%- if displayImg == '1'-%}
+			<a href="{{recipeUrl}}"><div class="fav-recipe-bg" {%-if img-%}style="background-image: url('{{img.getUrl(transformImg)}}');background-position:{{bgPosition}}"{%else%}style="background-image: url('/images/tcb-icon.svg');background-size:cover;background-position:center;"{%endif%}></div></a>
+		{%- else -%}
+			<a href="{{recipeUrl}}"><div class="fav-recipe-bg" {%-if img-%}data-img="{{img.getUrl(transformImg)}}" data-img-pos="{{bgPosition}}"{%else%}data-img="/images/tcb-icon.svg" data-img-pos="cover"{%endif%}></div></a>
+		{%- endif -%}
+	
+			{%-if not i.freeAccess and pro == 0-%}
+				<a href="#" class="proplan-link svg-fill">PRO <span><img src="/images/lock-icon.svg" alt="Lock Icon"></span></a>
+			{%-else-%}
+				{%- if currentSite.handle != 'tcbmarketing' -%}
+					{%- set favimg = (img) ? img.getUrl('resizeTo400px') : '' -%}
+					<a href="javascript:void(0);" title="{%if isfav == '1'%}Remove from your favourites{%else%}Add to your favourites{%endif%}" class="save-favourite-link svg-fill {%if isfav == '1'%}active{%endif%} save-favourite-article" data-id="{{i.id}}" data-title="{{i.title}}" data-img="{{favimg}}" data-user-fav="0"><img src="/images/favourite-icon-white.svg" alt="favourite" /></a>
+				{%- endif -%}
+			{%- endif -%}
+	</div>
+	<div class="fav-recipe-content">
+		<p class="fav-recipe-sub">
+			{# {%if i.textbox is not empty%}<span>{{i.textbox}}</span>{%endif%} #}
+			{%- set hook = i.hookWords -%}
+			{%- if hook is not empty -%}
+				{%- for h in hook -%}
+					<span>{{h.title}}</span>
+				{%- endfor -%}
+			{%- endif -%}
+			{%if i.textbox2 is not empty%}<span>{{i.textbox2}}</span>{%endif%}
+		</p>
+		<h4><a href="{{recipeUrl}}">{{i.title}}</a></h4>
+		{%- set recipeDiets = i.diets -%}
+		{%- if recipeDiets is not empty -%}
+		<ul class="dietlist-ul">
+			{%- for d in recipeDiets -%}																											
+				<li class="diet-icon-{{d.id}}">{{d.textbox}}</li>
+			{%- endfor -%}
+		</ul>
+		{%- endif -%}
+		{%-if hasBottom == 1 and pro == 1-%}
+		<div class="searchselect-addediv">
+			<div class="sadded-slectdrop">
+				{# <!-- <div class="sadded-count-click" data-meal-searving="{{i.number}}" data-people-init="{{user.number}}">{{user.number}}</div> --> #}
+				<div class="sadded-count-click" data-meal-searving="{{i.number}}" data-people-init="{{i.number}}">{{i.number}}</div>
+			</div>
+			<a href="javascript:void(0);" class="defult-btn green-bg addgroceries-btn addgroceries-list" data-recipe-id="{{i.id}}" data-recipe-title="{{i.title}}">
+				<div class="cat-chekbox">
+					<span class="plus-sign"></span>
+				</div> add to groceries
+			</a>
+		</div>
+		{%- endif -%}
+	</div>
+</div>
+
+{% endmacro %}
+
+{% macro hotTopicList(i,doNotDisplayImg,transformImg, isfav, pro)%}
+	{%- set img = '' -%}
+	{%- set bgPosition = ''-%}
+	{%- set img = i.listImage[0] ?? null -%}	
+	{%- if img -%}
+		{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+	{%- endif -%}
+	<div class="fav-recipes-boxdiv">
+		<div class="fav-recipe-bgdiv">
+			{%- if doNotDisplayImg == '1'-%}
+				<a href="{{i.url}}"><div class="fav-recipe-bg" {%if img%}data-img="{{img.getUrl(transformImg)}}" data-img-pos="{{bgPosition}}"{%else%}data-img="/images/tcb-icon.svg" data-img-pos="center"{%endif%}></div></a>
+			{%- else -%}
+				<a href="{{i.url}}"><div class="fav-recipe-bg" {%if img%}style="background-image: url('{{img.getUrl(transformImg)}}');background-position:{{bgPosition}}"{%else%}style="background-image:url('/images/tcb-icon.svg');background-position:center;background-size:cover;"{%endif%}></div></a>
+			{%- endif -%}
+			
+			
+			{%-if not i.freeAccess and pro == 0 -%}
+				<a href="#" class="proplan-link svg-fill">PRO <span><img src="/images/lock-icon.svg" alt="Lock Icon"></span></a>
+			{%- endif -%}
+			
+		</div>
+		<div class="fav-recipe-content">											
+			<h4><a href="{{i.url}}">{{i.title}}</a></h4>										
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro videoList(i,v,isfav,ctr,display,pro) %}
+	{%-set vidDenied = (not i.freeAccess and pro == 0) ? 1 : 0-%}
+	{%- set thumb = '' -%}
+	{%- if vidDenied == 1 -%}
+		{%- if i.image is not empty and i.image.one() is not null -%}
+			{%- set thumb = i.image.one().getUrl('resizeTo400px') -%}
+		{%- endif -%}
+	{%- endif -%}
+	<div class="fav-recipes-boxdiv" data-vidDenied="{{vidDenied}}">
+		<div class="fav-recipe-bgdiv">
+			<div class="fav-recipe-bg" style="background-color:#000;">
+				{%-if v.type == 'youtube'-%}
+					{%- if v.youtubeVideoId is not empty -%}
+						{%- if (display == '' or display is null) and vidDenied == 0 -%}
+						<iframe id="yplayer{{ctr}}" allowfullscreen="1" gesture="media" title="Transformation Cookbook" width="100%" height="100%" src="https://www.youtube.com/embed/{{v.youtubeVideoId}}?rel=0&autoplay=1&controls=0&mute=1&showinfo=0&modestbranding=1&fs=1&cc_load_policy=0&iv_load_policy=3&playlist={{v.youtubeVideoId}}&loop=1&autohide=0&enablejsapi=1"  frameborder="0"></iframe>
+						{%- endif -%}
+						<a class="video-cover {%if vidDenied == 1%}vidPro-only{%else%}various{%endif%} fancybox.iframe" {%if vidDenied == 0 %}href="https://www.youtube.com/embed/{{v.youtubeVideoId}}?rel=0&autoplay=1&controls=0&showinfo=0&modestbranding=1&fs=1&cc_load_policy=0&iv_load_policy=3&playlist={{v.youtubeVideoId}}&loop=1&autohide=0&enablejsapi=1"{%endif%} data-width="1600" data-height="900" {%if display=='displayThumb' or vidDenied == 1%}style="background-image:url({{thumb}});background-size:cover;background-position:center;"{%endif%}>
+							
+						</a>
+						{%- if i.textUnderVideo is not empty and vidDenied != 1-%}
+							<div class="text-under-video d-none">{{i.textUnderVideo}}</div>
+						{%- endif -%}
+					{%- endif -%}
+				{%-elseif v.type == 'vimeo'-%}
+					{%- if v.vimeoVideoId is not empty -%}
+						{%-if (display == '' or display is null) and vidDenied == 0 -%}
+						<iframe src="https://player.vimeo.com/video/{{v.vimeoVideoId}}?background=1&autoplay=1&loop=1&title=0&byline=0&portrait=0" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+						{%- endif -%}
+						<a class="video-cover {%if vidDenied == 1%}vidPro-only{%else%}various{%endif%} fancybox.iframe" {%if display=='displayThumb' or vidDenied == 1%}style="background-image:url({{thumb}});background-size:cover;background-position:center;"{%endif%} {%if vidDenied == 0 %}href="https://player.vimeo.com/video/{{v.vimeoVideoId}}?autoplay=1&loop=1&title=0&byline=0&portrait=0" data-width="1600" data-height="900"{%endif%}>
+							
+						</a>
+						{%- if i.textUnderVideo is not empty and vidDenied != 1-%}
+							<div class="text-under-video d-none">{{i.textUnderVideo}}</div>
+						{%- endif -%}
+					{%- endif -%}
+				{%- endif -%}															
+			</div>
+			
+			{%-if vidDenied == 1 -%}
+				<a href="#" class="proplan-link svg-fill">PRO <span><img src="/images/lock-icon.svg" alt="Lock Icon"></span></a>
+			{%- endif -%}
+				
+		</div>
+		<div class="fav-recipe-content">											
+			<h4>{{i.title}}</h4>										
+		</div>
+	</div>	
+{% endmacro %}
+{% macro videoListPreview(i,v,isfav,ctr,display,pro) %}
+{%-set vidDenied = (not i.freeAccess and pro == 0) ? 1 : 0-%}
+	{%- set thumb = '' -%}
+	{#
+	{%- if vidDenied == 1 -%}
+		{%- if i.image is not empty and i.image.one() is not null -%}
+			{%- set thumb = i.image.one().getUrl('resizeTo400px') -%}
+		{%- endif -%}
+	{%- endif -%}
+	#}
+	{%- if i.image is not empty and i.image.one() is not null -%}
+		{%- set thumb = i.image.one().getUrl('resizeTo400px') -%}
+	{%- endif -%}
+	{%-js-%}
+		console.log("video thumb = {{thumb}}")
+	{%-endjs-%}
+	<div class="fav-recipes-boxdiv" data-vidDenied="{{vidDenied}}">
+		<div class="fav-recipe-bgdiv">
+			<div class="fav-recipe-bg" style="background-color:#000;">
+				{%-if v.type == 'youtube'-%}
+					{%- if v.youtubeVideoId is not empty -%}
+						{%- if (display == '' or display is null) and vidDenied == 0 -%}
+						<iframe id="yplayer{{ctr}}" allowfullscreen="1" gesture="media" title="Transformation Cookbook" width="100%" height="100%" src="https://www.youtube.com/embed/{{v.youtubeVideoId}}?rel=0&autoplay=1&controls=0&mute=1&showinfo=0&modestbranding=1&fs=1&cc_load_policy=0&iv_load_policy=3&playlist={{v.youtubeVideoId}}&loop=1&autohide=0&enablejsapi=1"  frameborder="0"></iframe>
+						{%- endif -%}
+						<a class="video-cover {%if vidDenied == 1%}vidPro-only{%else%}various{%endif%} fancybox.iframe" {%if vidDenied == 0 %}href="https://www.youtube.com/embed/{{v.youtubeVideoId}}?rel=0&autoplay=1&controls=1&showinfo=0&modestbranding=1&fs=1&cc_load_policy=0&iv_load_policy=3&playlist={{v.youtubeVideoId}}&loop=1&autohide=0&enablejsapi=1"{%endif%} data-width="1600" data-height="900" {%if display=='displayThumb' or vidDenied == 1%}style="background-image:url({{thumb}});background-size:cover;background-position:center;"{%endif%}>
+							
+						</a>
+						{%- if i.textUnderVideo is not empty and vidDenied != 1-%}
+							<div class="text-under-video d-none">{{i.textUnderVideo}}</div>
+						{%- endif -%}
+					{%- endif -%}
+				{%-elseif v.type == 'vimeo'-%}
+					{%- if v.vimeoVideoId is not empty -%}
+						{%-if (display == '' or display is null) and vidDenied == 0 -%}
+						<iframe src="https://player.vimeo.com/video/{{v.vimeoVideoId}}?background=1&autoplay=1&loop=1&title=0&byline=0&portrait=0" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+						{%- endif -%}
+						<a class="video-cover {%if vidDenied == 1%}vidPro-only{%else%}various{%endif%} fancybox.iframe" {%if display=='displayThumb' or vidDenied == 1%}style="background-image:url({{thumb}});background-size:cover;background-position:center;"{%endif%} {%if vidDenied == 0 %}href="https://player.vimeo.com/video/{{v.vimeoVideoId}}?autoplay=1&loop=1&title=0&byline=0&portrait=0" data-width="1600" data-height="900"{%endif%}>
+							
+						</a>
+						{%- if i.textUnderVideo is not empty and vidDenied != 1-%}
+							<div class="text-under-video d-none">{{i.textUnderVideo}}</div>
+						{%- endif -%}
+					{%- endif -%}
+				{%- endif -%}															
+			</div>
+			
+			{%-if vidDenied == 1 -%}
+				<a href="#" class="proplan-link svg-fill">PRO <span><img src="/images/lock-icon.svg" alt="Lock Icon"></span></a>
+			{%- endif -%}
+				
+		</div>
+		<div class="fav-recipe-content">											
+			<h4>{{i.title}}</h4>										
+		</div>
+	</div>	
+{% endmacro %}
+{% macro setBannerImage(entry) %}
+	{%- set img = ''-%}
+	{%- if entry.mainHeaderImage is not empty and entry.mainHeaderImage.one() is not null -%}
+		{%- set img = entry.mainHeaderImage.one() -%}
+		{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+	{%- else -%}
+		{%-css-%}
+		.recipes-bgdiv{padding-bottom:0;}
+		{%-endcss-%}
+	{%- endif -%}
+
+	{%- if img is not empty -%}
+		{%- if craft.agent.isMobile() -%}
+			{%- set imgUrl = img.getUrl('convertTo500px')-%}
+		{%- elseif craft.agent.isTablet() -%}
+			{%- set imgUrl = img.getUrl('resizeTo1025px')-%}
+		{%- else -%}
+			{%- set imgUrl = img.url-%}
+		{%- endif -%}
+	{%- endif -%}
+	<div class="recipes-bgimg" {% if img is not empty%}style="background-image: url({{imgUrl}});background-position:{{bgPosition}}"{%endif%}></div>
+	<div class="b-sign d-lg-block d-none"></div>
+{% endmacro %}
+{% macro setBannerImageHotTopic(entry) %}
+	{%- set img = ''-%}
+	{%- set userDevice = '' -%}
+	
+	{%- if craft.agent.isMobile()-%}
+		{%- set userDevice = 'device-mobile' -%}
+	{%- elseif craft.agent.isTablet()-%}
+		{%- set userDevice = 'device-tablet' -%}
+	{%- elseif craft.agent.isDesktop() -%}
+		{%- set userDevice = 'device-desktop' -%}
+	{%- endif -%}
+	
+	{%- if entry.image is defined and craft.agent.isMobile() -%}
+		{%- if entry.image is not empty and entry.image.one() is not null  -%}
+			{%- set img = entry.image.one() -%}
+			{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+		{%- endif -%}
+	{%- endif -%}
+	
+	{%- if entry.image2 is defined and craft.agent.isTablet() -%}
+		{%- if entry.image2 is not empty and entry.image2.one() is not null  -%}
+			{%- set img = entry.image2.one() -%}
+			{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+		{%- endif -%}
+	{%- endif -%}
+	
+	{%- if img is empty and entry.mainHeaderImage is not empty and entry.mainHeaderImage.one() is not null  -%}
+		{%- set img = entry.mainHeaderImage.one() -%}
+		{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+	{%- endif -%}
+	
+	{%- if img is empty -%}
+		{%-css-%}
+		.recipes-bgdiv{padding-bottom:0;}
+		{%-endcss-%}
+	{%- endif -%}
+
+	{%- if img is not empty -%}
+		{%- if craft.agent.isMobile() -%}
+			{%- set imgUrl = img.getUrl('convertTo500px')-%}
+		{%- elseif craft.agent.isTablet() -%}
+			{%- set imgUrl = img.getUrl('resizeTo1025px')-%}
+		{%- else -%}
+			{%- set imgUrl = img.url-%}
+		{%- endif -%}
+	{%- endif -%}
+	<div class="recipes-bgimg {{userDevice}}"  {% if img is not empty%}style="background-image: url({{imgUrl}});background-position:{{bgPosition}}"{%endif%}></div>
+	<div class="b-sign d-lg-block d-none"></div>
+{% endmacro %}
+
+{% macro cta(cta)%}
+<section class="advertise-section {%if craft.agent.isDesktop()%}animation-element{%endif%}">
+	{%- set link = '' -%}
+	{%- if cta.linkx is not empty -%}
+		{%- if cta.linkx.one().type == 'internal' -%}
+			{%- if cta.linkx.one().linkTo is not empty and cta.linkx.one().linkTo.one() is not null -%}
+				{%- set link = '<a href="' ~ cta.linkx.one().linkTo.one().url ~ '">'-%}
+			{%- endif -%}
+		{%- else -%}
+			{%- if cta.linkx.one().externalurl is not empty -%}
+				{%- set link = '<a href="' ~ cta.linkx.one().externalurl ~ '" target="_blank">'-%}
+			{%- endif -%}
+		{%- endif -%}
+	{%- endif -%}
+	
+	{%- if link is not empty -%}{{link|raw}}{%- endif -%}
+	{%- if cta.image is not empty and cta.image.one() is not null-%}
+		{%- set imgUrl = '' -%}
+		{%- if craft.agent.isMobile() -%}
+			{%- set imgUrl = cta.image.one().getUrl('resizeTo700px')-%}
+		{%- elseif craft.agent.isTablet() -%}
+			{%- set imgUrl = cta.image.one().getUrl('resizeTo1300px')-%}
+		{%- else -%}
+			{%- set imgUrl = cta.image.one().url-%}
+		{%- endif -%}
+		<img src="{{imgUrl}}" alt="addvertice" class="cta-desktop">		
+	{%- endif -%}
+	{%- if cta.image2 is not empty and cta.image2.one() is not null-%}
+		<img src="{{cta.image2.one().url}}" alt="addvertice" class="cta-mobile d-none">
+	{%- endif -%}
+	{%- if link is not empty -%}</a>{%- endif -%}
+</section>
+{% endmacro %}

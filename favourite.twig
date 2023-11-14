@@ -1,0 +1,39 @@
+{%- extends "_layout" -%}
+{%- block head -%}
+	<link href="/vendor/fancybox3/jquery.fancybox.min.css" rel="stylesheet" media="screen" />
+{%- endblock -%}
+{%-block main-%}	
+	{% import '_macros' as tcbMacro %}
+	<section class="favourite-recipe-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<h2 class="fav-recipes-title">My Favourite Recipes</h2>
+				</div>
+			</div>
+			<div class="row favrec-row">								
+				{%- if userFavs is not empty -%}
+					{%- for i in userFavs-%}
+						<div class="col-md-4 col-sm-6 favrec-col {%if isDesktop == 1%}animation-element{%endif%} my-fav">{{tcbMacro.recipeList(i, '1', '1','convertTo500px','1',pro,'1')}}</div>
+					{%- endfor -%}
+				{%- endif -%}
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="cooking-title">What am I Cooking?</h3>
+					<a href="/groceries" class="view-groveries-link">VIEW GROCERIES</a>
+				</div>
+			</div>
+		</div>
+	</section>
+{%-endblock-%}	
+{%- block foot -%}
+	<script type="text/javascript" src="/js/bind.polyfill.js"></script>
+	<script type="text/javascript" src="/js/tocca.min.js"></script>
+	<script src="/vendor/fancybox3/jquery.fancybox.min.js"></script>
+	{%js%}
+		$(function(){
+			$(".various").fancybox();
+		})	
+	{%endjs%}	
+{%- endblock -%}

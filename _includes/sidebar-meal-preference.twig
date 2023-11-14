@@ -1,0 +1,58 @@
+<!-- Sidebar Meal -->
+<section class="filterside-section mealslidebar-div">
+	<a href="#" class="close-sidebar">Close</a>
+
+	<div class="logo-div">
+		<a href="/home">
+			<img src="/images/tcb-icon.svg" alt="TCB" class="tbl-logo">
+		</a>
+	</div>
+
+	<div class="accpre-content">
+		{%if isDesktop == 1%}
+		<div class="bubblebg-wrap">		
+			<div class="bubble b-sm x1522"></div>		   
+			<div class="bubble b-sm x422"></div>
+			<div class="bubble b-md x522"></div>
+			<div class="bubble b-sm x622"></div>
+			<div class="bubble b-lg x1222"></div>
+			<div class="bubble b-sm x1322"></div>
+		</div>
+		{%- endif -%}
+		<div class="accpre-content-inner">
+			<h3>What meal are you looking for? </h3>
+			 {%- if allmeals is not empty -%}
+			<ul class="accpre-category-list meals-circle">
+				{%- for i in allmeals -%}
+					<li>
+						{%- set activeClass = '' -%}
+						{%- if mid is not empty -%}
+							{%- set activeClass = (i.id == mid) ? 'active' : '' -%}				
+						{%- elseif mids is not empty and mids != 'all' -%}
+							{%- set activeClass = (i.id in mids) ? 'active' : '' -%}
+						{%-endif-%}
+						<a href="javascript:void(0);" class="select-meal-sidebar meal-select {{activeClass}}"  data-value="{{i.id}}">
+							<div class="accpre-category-img">
+								{%- set img = i.image[0] ?? null -%}
+								{%- if img -%}
+								<img src="{{img.getUrl('resizeTo300px')}}" alt="image" />
+								{%- endif -%}
+							</div>
+							<div class="accpre-category-boxdiv">
+								<h4>{{i.title}}</h4>
+								<div class="cat-chekbox">
+									<span class="plus-sign"></span>
+								</div>
+							</div>
+						</a>
+					</li>
+				{%- endfor -%}				
+			</ul>
+			{%- endif -%}
+		</div>
+		<div class="accpre-nextbtn-div">
+			<a href="#" class="defult-btn pink-bg" id="change-meal-display">Apply</a>
+		</div>
+	</div>
+</section>
+<!-- Sidebar diet -->

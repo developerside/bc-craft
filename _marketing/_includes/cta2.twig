@@ -1,0 +1,46 @@
+{%- set img = '' -%}				
+{%- if cta.image is not empty and cta.image.one() is not null -%}
+	{%- set img = cta.image.one() -%}
+	{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+{%- endif -%}
+{%- css -%}
+	.tcbwebapp-section:before{
+		background: -moz-linear-gradient(top,  rgba(0,0,0,{{cta.overlayOpacity}}) 0%, rgba(0,0,0,0) 100%);
+		background: -webkit-linear-gradient(top,  rgba(0,0,0,{{cta.overlayOpacity}}) 0%,rgba(0,0,0,0) 100%);
+		background: linear-gradient(to bottom,  rgba(0,0,0,{{cta.overlayOpacity}}) 0%,rgba(0,0,0,0) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
+	}
+{%- endcss -%}
+
+{%- if img is not empty and craft.agent.isDesktop()-%}
+	{%- set img = img.getUrl('resizeTo1920px')-%}
+{%- elseif img is not empty and craft.agent.isTablet() -%}
+	{%- set img = img.getUrl('resizeTo1025px')-%}
+{%- else -%}
+	{%- set img = img.getUrl('convertTo500px')-%}
+{%- endif -%}
+<section class="tcbwebapp-section animation-element {%if cta.lightswitch1%}parallax{%endif%}" {%if img is not empty%}style="background-image: url({{img}});background-position:{{bgPosition}};"{%endif%} oncopy="Copyright.showContext();return false;">
+<img src="/_marketing/images/passt-icon.svg" alt="Image" class="passt-icon-img">
+<div class="container">
+   <div class="row">
+		<div class="col-md-12">
+			<div class="content-tcbwebapp">
+				{%if cta.textbox is not empty%}<h5>{{cta.textbox}}</h5>{%endif%}
+				{%- if cta.textbox2 is not empty-%}
+					<p>{{cta.textbox2}}</p>
+				{%- endif -%}
+				{%- if cta.buttonLink is not empty -%}
+					{%- set btn = cta.buttonLink.one()-%}
+					{%- if btn.type == 'internal'-%}
+						<a {%if btn.linkTo.one() is not null%}href="{{btn.linkTo.one().url}}"{%endif%} class="defult-btn pink-bg">{{btn.buttonText}}</a>
+					{%- elseif btn.type == 'lintoTcbApp'-%}
+						<a {%if btn.linkTo is not empty%}href="{{alias('@tcbapp')~'/'~btn.linkTo.one().uri}}" target="_blank"{%endif%} class="defult-btn pink-bg">{{btn.buttonText}}</a>
+					{%- else -%}
+						<a {%if btn.urlLink is not empty%}href="{{btn.urlLink}}" target="_blank"{%endif%} class="defult-btn pink-bg">{{btn.buttonText}}</a>
+					{%- endif -%}
+				{%- endif -%}								
+			</div>
+		</div>
+	</div>
+</div>
+</section>

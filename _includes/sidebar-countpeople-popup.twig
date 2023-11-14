@@ -1,0 +1,40 @@
+<!-- Sidebar count number section -->
+	<section class="filterside-section countpeople-section"> 
+		<a href="#" class="close-sidebar">Close</a>
+		<div class="slidertop-courve"></div>
+		<div class="bubble b-sign"></div>
+		<div class="slidercenter-courve"></div>
+		<div class="sliderbtm-courve"></div>
+		<div class="countpeople-content">
+			<!--<a href="javascript:void(0);" class="countpeople-donebtn">Done</a>-->
+			<h3>How many people will you be cooking for?</h3>
+			<ul class="filter-list-ul">			
+				<li><a data-count="2" class="people-num" href="#">2</a></li>				
+				<li><a data-count="4" class="people-num" href="#">4</a></li>		
+				<li><a data-count="6" class="people-num" href="#">6</a></li>			
+				<li><a data-count="8" class="people-num" href="#">8</a></li>		
+				<li><a data-count="10" class="people-num" href="#">10</a></li>			
+				<li><a data-count="12" class="people-num" href="#">12</a></li>			
+				<li><a data-count="14" class="people-num" href="#">14</a></li>			
+				<li><a data-count="16" class="people-num" href="#">16</a></li>				
+				<li><a data-count="18" class="people-num" href="#">18</a></li>			
+				<li><a data-count="20" class="people-num" href="#">20</a></li>			
+				<li><a data-count="22" class="people-num" href="#">22</a></li>
+				<li><a data-count="24" class="people-num" href="#">24</a></li>
+			</ul>			
+		</div>			
+		<ul class="filter-social">
+			{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+			{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+		</ul>
+		{%if isDesktop == 1%}
+		<div class="bubblebg-wrap filter-bubble">		
+			<div class="bubble b-sm x1 yellow"></div>		    
+			<div class="bubble b-md x9 pink"></div>
+			<div class="bubble b-sm x15 skin"></div>
+			<div class="bubble b-md x8 green"></div>
+			<div class="bubble b-lg x5 yellow-big"></div>
+		</div>
+		{%endif %}
+	</section>
+	<!-- Sidebar count number section End -->

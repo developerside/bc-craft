@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<link rel="manifest" href="/manifest.json">
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=617bb9af02af9f00128d6895&product=sop' async='async'></script>
+{%- if entry is defined -%}
+	<title>{{entry.title}} || Transformation Cook Book</title>	
+{%- else -%}
+	<title>Transformation Cook Book</title>	
+{%- endif -%}
+{%- set currentUrl = craft.app.request.absoluteUrl -%}
+{%- include "_includes/head_css"-%}	
+
+{%- block head-%}{%-endblock-%}
+<link href="/css/dev.css?v=17" type="text/css" rel="stylesheet" />
+
+{% requireLogin %}
+{% set user = user ?? currentUser %}
+
+{%- set allmeals = craft.categories
+				.group('meals')
+				.with([
+					['image',{
+						withTransforms:['resizeTo300px']
+					}]
+				]).all() -%}
+
+{# ================ USER SELECTED MEALS. SAVE INTO AN ARRAY ============= #}
+{%- set selectedMeals = [] -%}
+{%- set userMeals = user.mealCategories.all() -%}
+{%- if userMeals is not empty -%}
+	{%- for i in userMeals -%}
+		{% set selectedMeals = selectedMeals|merge([i.id]) %}
+	{%- endfor -%}
+{%- endif -%}
+
+{# ================ USER SELECTED DIETS. SAVE INTO AN ARRAY ============= #}
+{%- set selectedDiets = [] -%}
+{%- set userDiets = user.diets.all() -%}
+{%- if userDiets is not empty -%}
+	{%- for i in userDiets-%}
+		{% set selectedDiets = selectedDiets|merge([i.id]) %}
+	{%- endfor -%}
+{%- endif -%}
+
+{# =============== USER NUMBER OF PEOPLE SELECTED ======================= #}
+{%- set numPeopleCooking = user.number-%}
+
+{#================ USER FAVORITES ============== #}
+{%- set selectedFavs = [] -%}
+{%- set userFavs = user.favorites.with([
+		['listImage',
+			{withTransforms:['convertTo500px']}
+		],
+		'mealCategories',
+		'hookWords',
+		'diets',
+		'videoType'
+		]).all()-%}
+{%- if userFavs is not empty -%}
+	{%- for i in userFavs-%}
+		{% set selectedFavs = selectedFavs|merge([i.id]) %}
+	{%- endfor -%}
+{%- endif -%}
+
+{#=============== USER GROCERIES ================ #}
+{%- set userGroceries = user.groceryItems.with([
+	'recipes',
+	'ingredients',
+	'measurements'
+	]).all() -%}
+{# ================ USER MARKED COOK. SAVE INTO AN ARRAY ============= #}
+{%- set cookedRecipes = [] -%}
+{%- set usercookedRecipes = user.cookedRecipes.all() -%}
+{%- if usercookedRecipes is not empty -%}
+	{%- for i in usercookedRecipes-%}
+		{% set cookedRecipes = cookedRecipes|merge([i.id]) %}
+	{%- endfor -%}
+{%- endif -%}
+
+{# =============== DIETS CSS COLOR ================= #}
+{%- set diets = craft.categories.group('diets').all() -%}
+{%- if diets is not empty -%}
+ {%-css-%}
+ {%- for i in diets -%}	
+	.diet-icon-{{i.id}}, 
+	#diet-icon-{{i.id}}{
+		border-color:{{i.colourTheme}} !important;
+		color: {{i.colourTheme}};
+	}
+	.diet-icon-{{i.id}}:hover,
+	#diet-icon-{{i.id}}:hover{
+		background-color:{{i.colourTheme}};
+		color: #FFF;
+	}	
+  {%- endfor -%}
+ {%-endcss-%}
+{%- endif -%}
+
+{# ============= CHECK IF USER IS PRO ============== #}
+{%- if currentUser.admin or currentUser.isInGroup('client') -%}
+	{%- set pro = 1 -%}
+	{%- set plan = 'Unlimited. You are logged in as admin'-%}
+{%- else -%}
+	{%- set pro = 0 -%}
+	{%- set plan = ''-%}
+	{%- set planUnsubscribeURL = ''-%}
+	{%- set freeProExpire = '' -%}
+
+	{%- set freeAccess = user.freePremiumExpirationDate -%}
+	{# <!--
+	{%- if user.textbox is not empty -%}
+		{% set submission = craft.freeform.submissions({
+		  fieldSearch: {
+			submissionID: user.textbox,
+		  }
+		}).one() %}
+		{%- if submission -%}
+			{%- set payments = craft.freeform.payments(submission.id) -%}
+			{% if payments %}
+				{% if payments.type == "subscription" %}
+				{%- if payments.status == 'active'-%}
+					{%- set pro = 1 -%}
+					{%- set plan = payments.planName -%}
+					{%- set planUnsubscribeURL = payments.unsubscribeUrl-%}			
+				{%- endif -%}
+				{% endif %}
+			  </ul>
+			{% endif %}
+		{%- endif -%}
+	{%- endif -%}
+	--> #}
+	{% set submissions = craft.freeform.submissions({
+		orderBy: "dateCreated DESC",
+		fieldSearch: {
+			email: '*'~user.email~'*'
+		}
+	}) %}
+	{% for submission in submissions %}
+	  {% set payments = craft.freeform.payments(submission.id) %}
+		{% if payments %}
+			{% if payments.type == "subscription" %}
+				{%- if payments.status == 'active'-%}
+					{%- set pro = 1 -%}
+					{%- set plan = payments.planName -%}
+					{%- set planUnsubscribeURL = payments.unsubscribeUrl-%}			
+				{%- endif -%}
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+	
+	
+	
+	{# == CHECKS IF THE USER PURCHASED A COOKBOOK WITH RECURRING SUBSCRIPTION == #}
+	{%- if pro == 0 -%}
+		{% set cookbookPurchaseRec = craft.freeform.submissions({
+			 orderBy: "dateCreated DESC",
+			form:"productPurchaseWithExistingAccountRecurringAnnual",
+			fieldSearch: {
+			email: '*'~user.email~'*'
+		  }
+		}).one() %}
+		{%- if cookbookPurchaseRec is not empty -%}
+			{%- set payments = craft.freeform.payments(cookbookPurchaseRec.id) -%}
+			{% if payments %}
+				{% if payments.type == "subscription" %}
+				{%- if payments.status == 'active'-%}
+					{%- set pro = 1 -%}
+					{%- set plan = "TCB Pro 69 AUD Annually" -%}
+					{%- set planUnsubscribeURL = payments.unsubscribeUrl-%}			
+				{%- endif -%}
+				{% endif %}
+			  </ul>
+			{% endif %}
+		{%- endif  -%}
+	{%- endif  -%}
+	
+	
+	{# == CHECKS IF THE USER HAS GIVEN FREE ACCESS ==#}
+	{%- if pro == 0 and user.freeProExpirationDate is not empty -%}
+		{%- set exdate = user.freeProExpirationDate|replace({' ': ''})|date("d-m-Y")|atom -%}
+		{%- if now|atom < exdate -%}
+			{%- set pro = 1 -%}
+			{%- set plan = "Free Premium Access" -%}
+			{%- set freeProExpire = user.freeProExpirationDate|replace({' ': ''})|date("d-m-Y")|date_modify('-1 day') -%}
+		{%- endif -%}
+	{%- endif -%}
+	
+	{# == CHECKS IF THE USER PURCHASED A COOKBOOK ==#}
+	{%- if pro == 0 -%}
+		{% set cookbookPurchase = craft.freeform.submissions({
+			 orderBy: "dateCreated DESC",
+			form:"productPurchaseWithExistingAccount",
+			fieldSearch: {
+			email: '*'~user.email~'*'
+		  }
+		}).one() %}
+		{%- if cookbookPurchase-%}
+			{%- if cookbookPurchase.premiumFreeAccessExpirationDate is not empty -%}
+				{%- set exdate = cookbookPurchase.premiumFreeAccessExpirationDate|replace({' ': ''})|date("d-m-Y")|atom -%}
+				{%- if now|atom < exdate -%}
+					{%- set pro = 1 -%}
+					{%- set plan = "Free Premium Access" -%}
+					{%- set freeProExpire = cookbookPurchase.premiumFreeAccessExpirationDate|replace({' ': ''})|date("d-m-Y")|date_modify('-1 day') -%}
+				{%- endif -%}
+			{%- endif -%}
+		{%- endif -%}
+	{%- endif -%}	
+	
+	{# == CHECKS IF THE USER PURCHASED A COOKBOOK - INTERNATIONAL ==#}
+	{%- if pro == 0 -%}
+		{% set cookbookPurchaseInternational = craft.freeform.submissions({
+			 orderBy: "dateCreated DESC",
+			form:"productPurchaseWithExistingAccountInternational",
+			fieldSearch: {
+			email: '*'~user.email~'*'
+		  }
+		}).one() %}
+		{%- if cookbookPurchaseInternational-%}
+			{%- if cookbookPurchaseInternational.premiumFreeAccessExpirationDate is not empty -%}
+				{%- set exdate = cookbookPurchaseInternational.premiumFreeAccessExpirationDate|replace({' ': ''})|date("d-m-Y")|atom -%}
+				{%- if now|atom < exdate -%}
+					{%- set pro = 1 -%}
+					{%- set plan = "Free Premium Access" -%}
+					{%- set freeProExpire = cookbookPurchaseInternational.premiumFreeAccessExpirationDate|replace({' ': ''})|date("d-m-Y")|date_modify('-1 day') -%}
+				{%- endif -%}
+			{%- endif -%}
+		{%- endif -%}
+	{%- endif -%}
+	
+{%- endif -%}
+{#
+{%js%}
+	console.log("Mobile = {{ craft.agent.isMobile() }} Tablet = {{ craft.agent.isTablet() }} Desktop = {{ craft.agent.isDesktop() }}")
+{%endjs%}
+#}
+
+{% set isDesktop = (craft.agent.isDesktop()) ? 1 : 0%}
+{%js%}
+	var mobileTablet = 0;
+	{%if isDesktop == 0%}
+		mobileTablet = 1;
+	{%endif%} 
+	{% if craft.app.session.hasFlash('notice') %}
+		console.log("{{ craft.app.session.getFlash('notice') }}")
+	{% elseif craft.app.session.hasFlash('error') %}
+		console.log("{{ craft.app.session.getFlash('error') }}")
+	{% endif %}	
+{%endjs%}
+{{siteSettings.googleAnalyticsApp|raw}}
+</head>
+<body class="page-loader {%if isDesktop == 0 %}mobileTablet{%endif%}">
+{%- include "_includes/loader" -%}
+<div class="page-wrapper"> 
+	{%- include "_includes/header2" -%}	
+	{%- include "_includes/sidebar-settings-popup"-%}
+	{%- include "_includes/sidebar-update-preferences"-%} 
+	{%- include "_includes/sidebar-fav-popup"-%}
+	{%- include "_includes/sidebar-countpeople-popup"-%}
+	{%- include "_includes/sidebar-groceries-popup"-%}	
+	{%- include "_includes/remove-favourites-popup"-%}
+	{%- include "_includes/sidebar-general-msg" -%}
+	{%- block main-%}{%-endblock-%}
+	{%- include "_includes/footer" -%}
+</div>
+<div class="loader"></div>
+{%- include "_includes/foot_js" -%}
+{%- block foot-%}{%-endblock-%}
+<div id="detect-login" class="d-none"></div>
+
+{%js%}
+	var checkLogin, stopAlert = 0;
+	$(function(){
+		checkLogin = window.setInterval(function(){
+			var url = "/detect-login .login-status";
+			jQuery( "#detect-login" ).load( url ,function(){
+				var t = jQuery.trim(jQuery('#detect-login').text());
+				console.log("t = "+t);
+				if(t == '0'){
+					window.clearInterval(checkLogin);
+					checkLogin = null;
+					stopAlert = 1;
+					if(stopAlert == 1){
+						$('#close-alert').unbind("click");
+						$('#close-alert').on('click',function(e){
+							 window.location = '/login'
+						  }); 
+							customAlert("Your session has ended, please login again.");
+							//createCookie('returnUrl',window.location.pathname,1)
+							
+					}					
+				}
+			});
+		},10000);
+		
+		$(".logout").unbind("click");
+		$(".logout").on("click",function(e){
+			e.preventDefault();
+			$.get("/logout").always(function() {
+				createCookie('logout','ok',1);
+				 window.location = '{{alias('@tcbapp')}}';
+			});	
+		})
+		
+		$(".share-trigger").on('click',function(e){
+			e.preventDefault();
+			var t = $(this).attr("data-target");
+			$(".st-btn[data-network="+t+"]").click();
+		})
+	})
+{%endjs%}
+{%- include "_includes/anti-copy" -%}
+</body>
+</html>
+

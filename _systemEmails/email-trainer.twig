@@ -1,0 +1,46 @@
+{% if emailKey == 'account_activation' %}
+	<p>We’ve solved your clients biggest problem!</p> 
+
+	<p>Hey {{user.friendlyName}}, like many businesses, we’ve had to pivot hard and adjust to the market to survive. </p> 
+
+	<p>Unfortunately, maintaining a huge resource site like mp-body.com indefinitely without fees or support just wasn’t sustainable.</p> 
+
+	<p>The good news is we have re-invested heavily and revamped to create more streamlined products with better formats that are target based and better suited for you and your clients.</p> 
+
+	<p>Firstly, to remove the guesswork and confusion about what to eat to transform, mp-body.com is now the transfromationcookbook.com</p> 
+	 
+	<p>A brand new, easy-to-use web app </p> 	
+	<ul>
+		<li>Packed with over 300 body-sculpting recipes! </li>
+		<li>Filter by Gluten Free, Dairy Free, Vegan, Vegetarian & more! </li>
+		<li>Turn recipes into customized shopping lists with our Shopping List Creator!</li>
+		<li>NEW recipes, articles & videos added every week!</li>
+	</ul>	
+	<p>Shop, Prep and Cook Stress free! </p> 
+
+	<p>Simply click on the button below to setup your password and gain 6 months free PRO access </p> 
+
+	<p><a href="{{link}}"><img src="https://www.transformationcookbook.com/images/setup-password.png" width="150"/></a></p>
+		
+	<p>Transformation Academy </p> 
+
+	<p>In the main menu of the new site you will also see another great feature, the Transformation Academy, this is where we will be hosting lots of new, exciting courses and certifications </p> 
+
+	<p>Upskill and refresh on us! </p> 
+
+	<p>If you purchased an MP Course previously and would like to upskill, just contact me with your purchase email. You can upskill and get certified, at no cost, on us! </p> 
+
+	<p>Starting with our <a href="https://academy.mp-body.com/">NEW Functional FIRE Accreditation Program.</a> </p> 
+
+	<p>The NEW Functional FIRE Accreditation Program comes complete with instant certifications so you can market to your new skills to your audience. </p> 
+
+	<p>Come take a look at what all the fuss is about! </p> 
+	<br/>
+	<p>Yours in health</p>	
+	<p>Shar and Paul<br/>
+	transformationcookbook.com</p>
+
+{% else %}
+	 {{ body }}
+{% endif %}
+								

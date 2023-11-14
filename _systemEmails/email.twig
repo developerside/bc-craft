@@ -1,0 +1,23 @@
+{% if emailKey == 'account_activation' %}
+	<p>Hey <strong>{{user.friendlyName}}</strong>, we want to thank you for your amazing support.</p>
+	<p>Because of the incredible support we get from our members like you, we've been able to take the next exciting step. </p>
+	<p>To remove the guesswork and confusion about what to eat to transform your health and body we are now the transfromationcookbook.com </p>
+	<p> A brand new, easy-to-use web app </p>
+	<ul>
+	 <li>Packed over 300 delicious, nutritious body-sculpting recipes </li>
+	 <li>Filter by Gluten Free, Dairy Free, Vegan, Vegetarian, Nut Free and Low Cal options.</li>
+	 <li>Our amazing Shopping list creator</li>
+	 <li>Plus, new recipes, transformation articles & workout videos every week!</li>
+	</ul>
+	<p>Shop, Prep and Cook Stress free! </p>
+	<p>Simply click on the button below to setup your password and gain 6 months free access</p>
+	<p><a href="{{link}}"><img src="https://www.transformationcookbook.com/images/setup-password.png" width="150"/></a></p>
+	<p>Let's get started on your journey</p> 
+	<br/>
+	<p>Shar xX</p>
+	<p>CVO – Chief Vision Officer</p>
+	<p>transformationcookbook.com</p>
+{% else %}
+	 {{ body }}
+{% endif %}
+								

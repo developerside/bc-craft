@@ -1,0 +1,53 @@
+<!-- Sidebar Saved to Favorites section -->
+<section class="filterside-section savefavsidebar-section">
+	<a href="#" class="close-sidebar">Close</a>
+	<div class="slidertop-courve">
+		
+	</div>
+	<div class="bubble b-sign"></div>
+	<div class="slidercenter-courve"></div>
+	<div class="sliderbtm-courve"></div>
+	<div class="savefavsidebar-content">
+		<h3>Saved to Favorites</h3>
+		<div class="savefavsidebar-slider">
+			<div>
+				<div class="grocery-item">
+					<div class="grocery-item-image">
+						<!-- <img src="/images/banner-3.jpg" alt="image" class="mealadded-img"> -->
+					</div>
+					<p class="recipe-title"></p>
+				</div>
+			</div>
+		</div>
+	
+		<div class="savefavsidebar-undolink">
+			<a href="javascript:void(0);" class="undofav-click" data-id="">undo</a>
+			<br>
+			<a href="/favourite" class="viewfavorite-click">VIEW FAVORITES</a>
+		</div>				
+	</div>			
+	<ul class="filter-social">
+		{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+		{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+	</ul>
+	{%if isDesktop == 1%}
+	<div class="bubblebg-wrap filter-bubble">		
+		<div class="bubble b-sm x122 yellow"></div>		    
+		<div class="bubble b-md x922 pink"></div>
+		<div class="bubble b-sm x1522 skin"></div>
+		<div class="bubble b-md x822 green"></div>
+		<div class="bubble b-lg x522 yellow-big"></div>
+	</div>
+	{%- endif -%}
+	<form name="save-favourite" method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="d-none">
+	  {{ csrfInput() }}
+	  {{ actionInput('users/save-user') }}
+	  {{ hiddenInput('userId', user.id) }}
+	  <input type="hidden" name="fields[favorites]" value="">
+	  {%- for i in userFavs-%}
+		<input type="checkbox" name="fields[favorites][]" value="{{i.id}}" checked/>
+	  {%- endfor -%}	  
+	</form>
+</section>
+<!-- Sidebar Saved to Favorites section End -->
+

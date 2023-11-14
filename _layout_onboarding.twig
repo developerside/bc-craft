@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>TCB || Onboarding</title>
+	<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=617bb9af02af9f00128d6895&product=sop' async='async'></script>
+	<link href="/vendor/fancybox3/jquery.fancybox.min.css" rel="stylesheet" media="screen" />
+	{%- include "_includes/head_css"-%}
+	 {%block head%}{%endblock%}
+	 <link href="/css/dev.css?{{now|date('U')}}" type="text/css" rel="stylesheet" />
+	 {% set isDesktop = (craft.agent.isDesktop()) ? 1 : 0%}
+	{%js%}
+		var mobileTablet = 0;
+		{%if isDesktop == 0%}
+			mobileTablet = 1;
+		{%endif%} 
+		
+	{%endjs%}
+	{%css%}
+		.bubblebg-wrap{opacity:1;}
+		@media (max-width: 1199px){
+		 .onboarding-image {width: 65%;}
+		}
+	{%endcss%}
+</head>
+<body class="page-loader">
+	{%- include "_includes/loader" -%}	
+	{%block main%}{%endblock%}	
+	{%- include "_includes/foot_js" -%}	
+	<script src="/vendor/fancybox3/jquery.fancybox.min.js"></script>
+	{%js%}
+		$(".various").fancybox();
+	{%endjs%}
+	<script type="text/javascript" src="/js/cookie.js"></script>
+	<script type="text/javascript" src="/js/onboarding.js?v=1"></script>	
+</body>
+</html>

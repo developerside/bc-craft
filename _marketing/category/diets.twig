@@ -1,0 +1,79 @@
+{% extends "_marketing/_layout" %}
+
+{%- set freeMeals = craft.entries.section('recipes').relatedTo(category)
+	.with([
+	['listImage',
+		{withTransforms:['resizeTo400px']}
+	],
+	'mealCategories','hookWords','diets']).freeAccess('1').orderBy('postDate desc').limit(50).all() -%}
+	
+{%- set proMeals = craft.entries.section('recipes').relatedTo(category)
+	.with([
+	['listImage',
+		{withTransforms:['resizeTo400px']}
+	],'mealCategories','hookWords','diets']).freeAccess('0').orderBy('postDate desc').limit(50).all() -%}
+{% css "/_marketing/css/general.css" %}
+{% block main %}
+{% hook "seo" %}
+{% import '_macros' as tcbMacro %}	
+
+		{%- set totalMeals = freeMeals|length + proMeals|length -%}
+		<section class="lowcalories-title-section" oncopy="Copyright.showContext();return false;">
+			<div class="container">
+	           <div class="row">
+	           		<div class="col-md-12">
+						
+	           			<h2>{{category.title}}</h2>
+	           			<p>{{category.textbox2}}</p>
+					
+	           		</div>
+	           	</div>
+	        </div>
+		</section>
+
+		<section class="lowcalories-listsection" oncopy="Copyright.showContext();return false;">
+			<div class="container">
+	           	<div class="row">
+					{%- set ctr = 0 -%}
+					{%- if freeMeals is not empty -%}
+						{%- for i in freeMeals -%}
+							{%- if ctr == 8 and totalMeals > 8 -%}
+								<section class="lowcalories-listsection" oncopy="Copyright.showContext();return false;"><div class="container"><div class="row">
+							{%- endif -%}
+							<div class="col-md-4 col-sm-6 lowcal-col">
+							{{tcbMacro.recipeList(i, '0', '0','resizeTo400px','0','0')}}
+							</div>
+							{%- set ctr = ctr + 1-%}
+							{%- if ctr == 8  and totalMeals > 8-%}
+								</div></div></section>
+								{%- include "_marketing/_includes/testimonials"-%}
+							{%- elseif ctr == totalMeals and totalMeals > 8-%}
+								</div></div></section>
+							{%- endif -%}
+						{%- endfor -%}
+					{%- endif -%}
+					{%- if proMeals is not empty -%}
+						{%- for i in proMeals-%}
+							{%- if ctr == 8 and totalMeals > 8 -%}
+								<section class="lowcalories-listsection"><div class="container"><div class="row">
+							{%- endif -%}
+							<div class="col-md-4 col-sm-6 lowcal-col">
+							{{tcbMacro.recipeList(i, '0', '0','resizeTo400px','0','0')}}
+							</div>
+							{%- set ctr = ctr + 1-%}
+							{%- if ctr == 8 and totalMeals > 8-%}
+								</div></div></section>
+								{%- include "_marketing/_includes/testimonials"-%}
+							{%- elseif ctr == totalMeals and totalMeals > 8-%}
+								</div></div></section>
+							{%- endif -%}
+						{%- endfor -%}
+					{%- endif -%}
+					
+		{%- if totalMeals <= 8 -%}
+			</div></div></section>
+			{%- include "_marketing/_includes/testimonials"-%}
+		{%- endif -%}
+
+{% endblock %}
+{% js "/_marketing/js/general.js" %}

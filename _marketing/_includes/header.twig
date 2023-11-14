@@ -1,0 +1,66 @@
+<!-- header -->
+<header class="site-header" style="animation-direction: reverse; animation-duration: 300ms;">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="header-innerwrap">
+					<div class="logo-div">
+						<a href="/">
+							<img src="/_marketing/images/TCB-logo-pink-marketing.png" alt="TCB" class="desktop-logo" />
+							<img src="/_marketing/images/TCB_light_grey.svg" alt="TCB" class="sticky-logo" />
+							<span>TCB</span>
+						</a>
+					</div>
+					<div class="head-center-nav">
+						<div class="mobile-menudiv">
+							<div class="slidercenter-courve"></div>
+							<div class="sliderbtm-courve"></div>
+							<div class="logodiv">
+								<a href="/">
+									<img src="/_marketing/images/tcb-eye-logo.png" alt="TCB" />
+								</a>
+							</div>
+							{%js%}
+								console.log("{{craft.app.request.pathInfo}} path");
+							{%endjs%}
+							<ul class="navigation-ul">
+								<li {%if craft.app.request.pathInfo == ''%}class="active"{%endif%}><a href="{{alias('@tcbmarketing')}}">HOME</a></li>
+								{%- set gens = craft.entries.section('general').lightswitch1('0').all()-%}
+								{%- for i in gens -%}
+									{%- if i.type == 'externalLink' -%}
+										<li><a href="{{i.textbox}}" target="_blank">{{i.title}}</a></li>
+									{%- else -%}
+										<li {%if i.uri in craft.app.request.pathInfo %}class="active"{%endif%}><a href="/{{i.uri}}">{{i.title}}</a></li>
+									{%- endif -%}
+								{%- endfor -%}
+							</ul>
+							<div class="social-nav">
+								<ul class="footer-social">
+									{%if siteSettings.textbox is not empty%}<li><a href="{{siteSettings.textbox}}" target="_blank"><img src="/images/facebook-icon.svg" alt="facebook"></a></li>{%endif%}
+									{%if siteSettings.textbox2 is not empty%}<li><a href="{{siteSettings.textbox2}}" target="_blank"><img src="/images/instagram-icon.svg" alt="instagram"></a></li>{%endif%}
+								</ul>
+							</div>
+							<div class="bubblebg-wrap filter-bubble">		
+								<div class="bubble b-sm x1 yellow"></div>		    
+								<div class="bubble b-md x9 pink"></div>
+								<div class="bubble b-sm x15 skin"></div>
+								<div class="bubble b-md x8 green"></div>
+								<div class="bubble b-lg x5 yellow-big"></div>
+							</div>
+						</div>
+						<a href="javascript:void(0);" class="burger-click svg-fill">
+							<img src="/_marketing/images/burger-icon.svg" alt="Burger" />
+							<img src="/_marketing/images/close-icon.svg" alt="Close" class="close-icon" />
+						</a>
+					</div>
+					<div class="head-rightside">
+						<div class="signup-btndiv">
+							<a href="{{alias('@tcbapp')}}/login" class="defult-btn pink-bg">LOG IN</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- header End -->

@@ -1,0 +1,498 @@
+<div class="page-content" oncopy="Copyright.showContext();return false;">
+	{% for block in entry.pageContent.all() %}
+	{% set loopIndex = loop.index %}
+	{% switch block.type %}
+	{% case "webform" %}
+	<section class="meet-the-people-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-meet-the-people text-left">
+						{{block.intro}}
+						{% if craft.app.plugins.isPluginEnabled('freeform') and block.form is defined and block.form is not null %}  
+						{% if block.form is defined and block.form is not null %} 
+						<div class="web-form">
+							{% if block.form.returnUrl %}
+							{% set returnUrl=block.form.returnUrl %}
+							{% else %}
+							{% set returnUrl=currentUrl~'?success=1' %}
+							{% endif %}
+							{% set successParam = craft.app.request.getParam('success') %}
+							{% if successParam is not null and not block.form.hasErrors %}  
+							<div class="form-group col-sm-12 col-xs-12">
+								<div class="alert alert-success">
+									Success!
+									Form submitted successfully!
+								</div>
+							</div>
+							{% set returnUrl=currentUrl %}
+							{% endif %}
+							
+							{{ block.form.render({
+								returnUrl:returnUrl
+							}) }} 
+							
+							{%- if block.form.handle == 'paymentForm'-%}
+								{%-js-%}
+								var f = $("form.custom-payment-form"), i, submit = 0;
+								$(function(){
+									$('.payment-form-btn').on('click',function(){
+										submit = 1
+										$('.loader').show();
+										i = setInterval(function(){
+											if(submit == 1 && f.find('.alert.alert-danger').length){
+												submit = 0;
+												$(".loader").hide();
+												$('html, body').animate({ scrollTop: '0' }, 'fast');
+											}else if(submit == 1 && f.find('.alert.alert-success').length){
+												submit = 0;
+												clearInterval(i);
+												window.location = "/thank-you-payment-success";					
+											}
+										},1000);
+									})
+								})
+								{%-endjs-%}
+							{%- endif -%}
+						</div>    
+						{% endif %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	{% case "standardTextEditing" %}
+	<section class="meet-the-people-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-meet-the-people">
+						{{ block.standardTextEditing }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{% case "heartText" %}
+	<section class="whytcb-section" id="whytcb-heading">
+		{% if block.mainHeading %}
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="whytcb-heading" >
+						<h2>{{ block.mainHeading }}</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{% for blk in block.blocks.all() %}
+		<div class="whyfull-sec {{ blk.darkBlueBackground?'blue':'' }}">
+			<div class="whytcb-content">
+				<div class="whytcb-box">
+					<div class="daily-tcbicon">
+						<img src="{{ siteUrl }}_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB">
+					</div>
+					{% if blk.heading %}
+					<h4>{{ blk.heading }}</h4>
+					{% endif %}
+					{% if blk.paragraph %}
+					<p>{{ blk.paragraph }}</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</section>
+
+	{% case "centeredCircleImage" %}
+	 <section class="howitworks-section" id="howitworks-section">
+	        <div class="container">
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <div class="howitworks-content">
+	                        {%if block.header is not empty %}<h2>{{block.header}}</h2>{%endif%}
+	                        {{block.textEditor}}
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+			{%- if block.centerImageBlock is not empty -%}
+				{%- for i in block.centerImageBlock.all() -%}
+					<div class="howitworks-plan-section {%if i.darkerGreyBackground%}bg-white{%endif%}">
+						{%- set img = ''-%}
+						{%- if i.imageOrIcon is not empty and i.imageOrIcon.one() is not null -%}
+							{%- set img = i.imageOrIcon.one()-%}
+							{% set bgPosition= i.imageOrIcon.one() ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+						{%- endif -%}
+						{%- if img is not empty -%}
+						<div class="howitworks-round-circle" style="background-image:url({{img.getUrl('resizeTo400px')}});background-position:{{bgPosition}};"></div>
+						{%- endif -%}
+						<div class="howitworks-box-content">
+							{{i.textEditor}}
+						</div>		                
+					</div>
+				{%- endfor -%}
+			{%- endif -%}
+	    </section>
+
+	{% case "callToAction" %}
+	{%- if block.item is not empty and block.item.one() is not null -%}
+		{%- include "_marketing/_includes/cta2" with {cta:block.item.one()}-%}
+	{%- endif -%}
+	{# <!--	
+	<section class="tcbwebapp-section {{ block.parallaxScrolling?'parallax':'' }}" {% if block.image.count() %} style="background-image: url('{{ block.image.one().url }}');" {% endif %}>
+		<img src="{{ siteUrl }}images/passt-icon.svg" alt="Image" class="passt-icon-img">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-tcbwebapp">
+						{% if block.heading %}
+						<h5>{{ block.heading }}</h5>
+						{% endif %}
+						{% if block.subHeading %}
+						<h6>{{ block.subHeading }}</h6>
+						{% endif %}
+						{% if block.paragraph %}
+						<p>{{ block.paragraph }}</p>
+						{% endif %}
+						{% for btn in block.button.all() %}
+						<a {% for lnk in btn.buttonLink.all() %}
+						{% if lnk.type=='internalLink' %}
+						href="{{ lnk.linkUrl.count()?lnk.linkUrl.one().url:'javascript' }}"
+						{% elseif lnk.type=='externalLink' %}
+						href="{{ lnk.linkUrl }}" target="_blank"
+						{% endif %}
+						{% endfor %} class="defult-btn pink-bg">{{ btn.buttonText }}</a>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	--> #}
+	{% case "imageText" %}
+	<section class="about-inspiration-section {{ block.textBoxColour=='lightGrey'?'bg-light-grey':'bg-dark-blue' }} align-text-{{ block.textAlignment }} {{block.mobileImageAlignment == 'bottom' ? 'mobileImageBottom' : ''}}">
+		<div class="about-inspiration-image">
+			<div class="about-inspiration-imagewrap">
+				{%- set imglink = '' -%}
+				{%- set tgt = '' -%}
+				{%- if block.imageLink is not empty -%}
+					{%- if block.imageLink.linkType.one() is not null and block.imageLink.linkType is not empty -%}						
+						{%- set lk = block.imageLink.linkType.one()-%}						
+						{%- if lk.type == 'internalLink'-%}
+							{%- if lk.entryLink is not empty and lk.entryLink.one() is not null -%}
+								{%- set imglink = lk.entryLink.one().url -%}
+							{%- endif -%}
+						{%- elseif lk.type == 'externalLink'-%}
+							{%- if lk.linkUrl is not empty -%}
+								{%- set imglink = lk.linkUrl -%}
+								{%- set tgt = '_blank' -%}
+							{%- endif -%}
+						{%- elseif lk.type == 'assetLink'-%}
+							{%- if lk.assetItem is not empty and lk.assetItem.one() is not null -%}
+								{%- set imglink = lk.assetItem.one().url -%}
+								{%- set tgt = '_blank' -%}
+							{%- endif -%}
+						{%- elseif lk.type == 'videoPopupVimeo'-%}
+							{%- if lk.vimeoId is not empty -%}
+								{%- set imglink = lk.vimeoId -%}
+								{%- set tgt = 'vidvim' -%}
+							{%- endif -%}
+						{%- elseif lk.type == 'videoPopupYoutube'-%}
+							{%- if lk.youtubeId is not empty -%}
+								{%- set imglink = lk.youtubeId -%}
+								{%- set tgt = 'vidyt' -%}
+							{%- endif -%}
+						{%- endif -%}
+					{%- endif -%}
+				{%- endif -%}
+			
+				{%- set moimg = '' -%}
+				{%- if block.imageOnMouseover is not empty and block.imageOnMouseover.one() is not null -%}
+					{%- set moimg = block.imageOnMouseover.one().url -%}
+					<img src="{{moimg}}" class="d-none">
+					{%css%}
+						.about-inspiration-bg#imageText-img-{{loopIndex}}:hover{background-image:url({{moimg}}) !important;}
+					{%endcss%}
+				{%- endif -%}
+				{% if block.image.count() %}
+					{%js%}
+					console.log("image link = {{imglink}}")
+					{%endjs%}
+					{%- if imglink is not empty and tgt != 'vidvim' and tgt != 'vidyt'-%}
+						<a href="{{imglink}}" {%if tgt == '_blank'%}target="_blank"{%endif%}>
+					{%- elseif imglink is not empty and tgt == 'vidyt' -%}
+						<a href="https://www.youtube.com/embed/{{imglink}}?rel=0&autoplay=1&controls=0&showinfo=0&modestbranding=1&fs=1&cc_load_policy=0&iv_load_policy=3&playlist={{imglink}}&loop=1&autohide=0&enablejsapi=1" class="various fancybox.iframe">
+					{%- elseif imglink is not empty and tgt == 'vidvim' -%}
+						<a href="https://player.vimeo.com/video/{{imglink}}?autoplay=1&loop=1&title=0&byline=0&portrait=0" class="various fancybox.iframe">
+					{%- endif -%}
+					{%- set img = block.image.one() is not null ? block.image.one() : null -%}
+					{% set bgPosition= img is not null ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+					<div class="about-inspiration-bg" id="imageText-img-{{loopIndex}}" {%if img is not null%}style="background-image: url('{{ img.url }}');background-position:{{bgPosition}};"{%endif%}></div>
+					{%- if imglink is not empty -%}
+						</a>
+					{%- endif -%}
+				{% endif %}
+				
+			</div>
+		</div>
+		<div class="about-inspiration-content">
+			<div class="daily-inspiration-content">
+				<div class="content-filter-preference">
+					{% if block.showTcbLogo %}
+					<div class="daily-tcbicon">
+						<img src="{{ siteUrl }}_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB">
+					</div>
+					{% endif %}
+					{% if block.heading %}
+					<h2>{{ block.heading }}</h2>
+					{% endif %}
+					{% if block.introduction %}
+					<h4 {%if block.colour is not empty%}style="color:{{block.colour}}"{%endif%}>{{ block.introduction }}</h4>
+					{% endif %}
+					{% if block.text %}
+					{{ block.text }}
+					{% endif %}
+					
+					{% for btn in block.button.all() %}
+						{%- if btn.buttonText is not empty -%}
+						<a {% for lnk in btn.buttonLink.all() %}
+						{% if lnk.type=='internalLink' %}
+						href="{{ lnk.linkUrl.count()?lnk.linkUrl.one().url:'javascript' }}"
+						{% elseif lnk.type=='externalLink' %}
+						href="{{ lnk.linkUrl }}" target="_blank"
+						{% endif %}
+						{% endfor %} class="defult-btn pink-bg">{{ btn.buttonText }}</a>
+						{%- endif -%}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</section>
+	{% case "profile" %}
+	<section class="meet-the-people-section founder-people-section">
+		<div class="row founder-row">
+		{% for key,profile in block.profiles.all() %}
+			<div class="col-md-6">
+				<div class="founder-shar-sault">
+					<div class="img-founder">
+						{% if profile.image.count() %}
+						<img src="{{ profile.image.one().getUrl('resizeTo400px') }}" alt="Image" class="">
+						{% endif %}
+					</div>
+					<div class="founder-name">
+						<h6>{{ profile.profileName }}</h6>
+						<p>{{ profile.profileTitle }}</p>
+						{% for lnk in profile.button.all() %}
+						<a {% if lnk.type=='internalLink' %}
+						href="{{ lnk.linkUrl.count()?lnk.linkUrl.one().url:'javascript' }}"
+						{% elseif lnk.type=='externalLink' %}
+						href="{{ lnk.linkUrl }}" target="_blank"
+						{% endif %}  class="defult-btn pink-bg">Learn More</a>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		{{ (key+1)%2?'':'</div><div class="row founder-row">' }}
+		{% endfor %}
+	</div>
+	</section>
+	{% case "comparison"%}
+		{%- if block.comparisonSlider is not empty -%}
+			<section class="comparison-section">
+			<div class="container">
+	           	<div class="row">
+	           		<div class="col-md-6">
+	           			<div class="comparison-content">
+	           				<img src="/_marketing/images/tcb-eye-logo.png" alt="image">
+							<div class="comparison-title">TRANSFORMATIONS</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="comparison-sliderwrap">
+							<div class="accpre-category-list comparison-slider">
+								{%- for slides in block.comparisonSlider.all() -%}
+									{%- for s in slides.compare2Items.all() -%}
+										<div class="compare-item">									
+											
+												<div class="accpre-category-img">
+												{%- if s.tcbRecipeImage is not empty and s.tcbRecipeImage.one() is not null-%}
+													<img src="{{s.tcbRecipeImage.one().getUrl('resizeTo300px')}}" alt="image">
+												{%- endif -%}
+													<div class="homerbanner-iconover">
+														<img src="/_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB">
+													</div>
+												</div>
+											<div class="accpre-category-boxdiv">
+												{%- set fontsize = (s.tcbRecipeTitle|length >= 27) ? 'fsm' : '' -%}
+												<h4 class="{{fontsize}}">{{s.tcbRecipeTitle}}</h4>
+												{%- if s.servingSize is not empty -%}
+												<small>{{s.servingSize}}</small>
+												{%- endif -%}
+												<div class="nutri-box">
+												{%if s.kj is not empty%}<p><span>{{s.kj}}</span></p>{%endif%}
+												{%if s.protein is not empty%}<p>Protein - <span>{{s.protein}}</span></p>{%endif%}
+												{%if s.carbs is not empty%}<p>carbs - <span>{{s.carbs}}</span></p>{%endif%}
+												{%if s.fat is not empty%}<p>Fat - <span>{{s.fat}}</span></p>{%endif%}
+												</div>
+											</div>									
+										</div>
+										<div class="compare-item">									
+											
+												<div class="accpre-category-img">
+													{%- if s.ordinaryRecipeImage is not empty and s.ordinaryRecipeImage.one() is not null-%}
+														<img src="{{s.ordinaryRecipeImage.one().getUrl('resizeTo300px')}}" alt="image">
+													{%- endif -%}
+												</div>
+												<div class="accpre-category-boxdiv pink-bg">
+												{%- set fontsize = (s.oridinaryRecipeTitle|length >= 27) ? 'fsm' : '' -%}
+												<h4 class="{{fontsize}}">{{s.oridinaryRecipeTitle}}</h4>
+												{%- if s.servingSize2 is not empty -%}
+												<small>{{s.servingSize2}}</small>
+												{%- endif -%}
+												<div class="nutri-box">
+												{%if s.kj2 is not empty%}<p><span>{{s.kj2}}</span></p>{%endif%}
+												{%if s.protein2 is not empty%}<p>Protein - <span>{{s.protein2}}</span></p>{%endif%}
+												{%if s.carbs2 is not empty%}<p>carbs - <span>{{s.carbs2}}</span></p>{%endif%}
+												{%if s.fat2 is not empty%}<p>Fat - <span>{{s.fat2}}</span></p>{%endif%}
+												</div>
+											</div>									
+										</div>
+									{%- endfor -%}									
+								{%- endfor -%}								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>			
+		{%- endif -%}
+		{% case "comparisonV2"%}
+			{%- if block.comparisonEntries is not empty -%}
+				<section class="comparison-section">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="comparison-content">
+									<img src="/_marketing/images/tcb-eye-logo.png" alt="image">
+									<div class="comparison-title">TRANSFORMATIONS</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="comparison-sliderwrap">
+									<div class="accpre-category-list comparison-slider">
+										{%- for s in block.comparisonEntries.all() -%}
+											<div class="compare-item">										
+													<div class="accpre-category-img">
+													{%- if s.image is not empty and s.image.one() is not null-%}
+														<img src="{{s.image.one().getUrl('resizeTo300px')}}" alt="image">
+													{%- endif -%}
+														<div class="homerbanner-iconover">
+															<img src="/_marketing/images/TCB_Heart_Light_Grey.svg" alt="TCB">
+														</div>
+													</div>
+												<div class="accpre-category-boxdiv">
+													{%- set fontsize = (s.textbox|length >= 27) ? 'fsm' : '' -%}
+													<h4 class="{{fontsize}}">{{s.textbox}}</h4>
+													{%- if s.textbox2 is not empty -%}
+													<small>{{s.textbox2}}</small>
+													{%- endif -%}
+													<div class="nutri-box">
+													{%if s.textbox3 is not empty%}<p><span>{{s.textbox3}}</span></p>{%endif%}
+													{%if s.textbox4 is not empty%}<p>Protein - <span>{{s.textbox4}}</span></p>{%endif%}
+													{%if s.textbox5 is not empty%}<p>carbs - <span>{{s.textbox5}}</span></p>{%endif%}
+													{%if s.textbox6 is not empty%}<p>Fat - <span>{{s.textbox6}}</span></p>{%endif%}
+													</div>
+												</div>									
+											</div>
+											
+											<div class="compare-item">										
+													<div class="accpre-category-img">
+														{%- if s.image2 is not empty and s.image2.one() is not null-%}
+															<img src="{{s.image2.one().getUrl('resizeTo300px')}}" alt="image">
+														{%- endif -%}
+													</div>
+													<div class="accpre-category-boxdiv pink-bg">
+													{%- set fontsize = (s.textbox7|length >= 27) ? 'fsm' : '' -%}
+													<h4 class="{{fontsize}}">{{s.textbox7}}</h4>
+													{%- if s.textbox8 is not empty -%}
+													<small>{{s.textbox8}}</small>
+													{%- endif -%}
+													<div class="nutri-box">
+													{%if s.textbox9 is not empty%}<p><span>{{s.textbox9}}</span></p>{%endif%}
+													{%if s.textbox10 is not empty%}<p>Protein - <span>{{s.textbox10}}</span></p>{%endif%}
+													{%if s.textbox11 is not empty%}<p>carbs - <span>{{s.textbox11}}</span></p>{%endif%}
+													{%if s.textbox12 is not empty%}<p>Fat - <span>{{s.textbox12}}</span></p>{%endif%}
+													</div>
+												</div>									
+											</div>
+											
+										{%- endfor -%}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>	
+			{%- endif -%}
+			{% case "priceModule" %}
+				{%- set img ='' -%}				
+					{%- set bgPosition = '' -%}
+					{%- if block.backgroundImage is not empty and block.backgroundImage.one() is not null-%}
+						{%- set img = block.backgroundImage.one() -%}		
+						{% set bgPosition= img ? img.hasFocalPoint?img.getFocalPoint().x * 100 ~ '% ' ~ img.getFocalPoint().y * 100 ~ '%':'center center':'center center' %}
+						{%- set img = img.getUrl('resizeTo1920px')-%}
+					{%- endif -%}
+				<section class="price-section gp-price" {%if img is not empty%}style="background-image:url({{img}});background-position:{{bgPosition}};"{%endif%}>
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="sign-icon text-center mb-md-3 mb-5"><img src="/_marketing/images/dot-white/sign-icon-w.png" class="text-center" alt=""></div>
+								{%if block.heading is not empty%}<h2 class="animation-element text-center mb-4">{{block.heading}}</h2>{%endif%}
+								{%if block.subHeading is not empty%}<h4 class="animation-element text-center mb-5">{{block.subHeading}}</h2>{%endif%}
+								<div class="price-btn-wrp row flex-md-nowrap">									
+									<div class="go-pro col-md-12 text-left pl-lg-5 pl-md-4 pt-md-0 pt-5">
+										{%- set pblink = '' -%}
+										{%- if block.button -%}
+											{%- if block.button.buttonText is not empty -%}
+												{%- if block.button.buttonLink is not empty and block.button.buttonLink.one() is not null -%}
+													{%- set pb = block.button.buttonLink.one() -%}													
+													{%- set typ = '' -%}
+													{%- if pb.type == 'internalLink'-%}
+														{%- if pb.entryLink is not empty and pb.entryLink.one() is not null -%}
+															{%- set pblink = pb.entryLink.one().url -%}
+														{%- endif -%}
+													{%- elseif pb.type == 'externalLink'-%}
+														{%- if pb.externalUrl is not empty -%}
+															{%- set pblink = pb.externalUrl -%}
+															{%- set typ = 'x' -%}
+														{%- endif -%}														
+													{%- endif -%}													
+												{%- endif-%}
+											{%- endif -%}
+										{%- endif -%}	
+										<a {%if pblink is not empty%}href="{{pblink}}"{%else%}href="#"{%endif%} {# {%if typ == 'x'%}target="_blank"{%endif%} #} class="plan-btn mb-4 animation-element">
+											<span class="pro-text">{{block.price}}</span>
+											<span class="month">{{block.priceDescription}}</span>
+										</a>
+										
+										{%- if pblink is not empty -%}
+										<div class="text-md-left text-center btn-wrap">
+											<a href="{{pblink}}" {# {%if typ == 'x'%}target="_blank"{%endif%} #} class="defult-btn text-uppercase">{{block.button.buttonText}}</a>
+										</div>
+										{%- endif -%}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			
+	{% default %}
+
+	{% endswitch %}
+	{% endfor %}
+</div>

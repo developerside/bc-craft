@@ -1,0 +1,25 @@
+{%css "/css/copy.css" %}
+{%js "/js/copy.js"%}
+<div style="display: none;" class="copyright_context" id="copyright_context"></div>
+<div style="display: none;" class="copyright_protected" id="copyright_protected">
+	<div class="box">
+		<h4 class="right"><a onclick="javascript:Copyright.hideContext();return false;" href="javascript:void(0);"></a></h4>
+		<h3 class="title">This content is copyright protected</h3>
+		<div class="box_pad">
+			{%- if entry is defined -%}
+			<h3>{{entry.title}}</h3>
+			{%- else -%}
+			<h3>Transformation Cook Book</h3>
+			{%- endif -%}
+			<p class="link"><a href="{{craft.app.request.absoluteUrl}}">{{craft.app.request.absoluteUrl}}</a></p>
+			<p class="message">However, if you would like to share the information in this article, you may use link below:</p>
+			<p class="headline">
+			<a href="https://www.facebook.com/sharer/sharer.php?u={{craft.app.request.absoluteUrl}}" target="_blank"><img alt="" src="/images/fb-share.jpg" /></a> 
+			<a href="https://twitter.com/home?status=Good%20read%20here%20{{craft.app.request.absoluteUrl}}" target="_blank"><img alt="" src="/images/twitter-share.jpg" /></a>
+			</p>
+			<div class="introduction">
+			</div>
+		</div>
+		<div class="box_spacer"></div>
+	</div>
+</div>

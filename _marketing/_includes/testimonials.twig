@@ -1,0 +1,51 @@
+<section class="testimonial-section animation-element" oncopy="Copyright.showContext();return false;">
+<div class="testimonial-slider">
+	{%- set testi = craft.entries.section('testimonials').orderBy('postDate desc').limit(8).all()-%}
+	{%- if testi is not empty -%}
+		{%- for t in testi-%}
+			{%- if t.image is not empty or t.image2 is not empty -%}
+				<div>
+					<div class="testimonial-corner"></div>
+					<div class="container">
+					   <div class="row">
+							<div class="col-md-12">		           			
+								<div class="testimonial-boxdiv">
+									<div class="testimonial-afterbefore">
+										{%- if t.image.one() is not null -%}
+										<div class="beforeimg" style="background-image: url({{t.image.one().getUrl('testimonialCut')}});"></div>
+										{%- endif -%}
+										{%- if t.image2.one() is not null -%}
+										<div class="afterimg" style="background-image: url({{t.image2.one().getUrl('testimonialCut')}});"></div>
+										{%- endif -%}
+									</div>
+									<div class="testimonial-content">
+										<p>{{t.textbox}}</p>
+										<div class="testimonial-user">{{t.title}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{%- else -%}
+				<div class="lightpink-testimonial">
+					<div class="testimonial-corner"></div>
+					<div class="container">
+					   <div class="row">
+							<div class="col-md-12">			           			
+								<div class="testimonial-boxdiv">														
+									<div class="testimonial-content">
+										<p>{{t.textbox}}</p>
+										<div class="testimonial-user">{{t.title}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>								
+			{%- endif -%}								
+		{%- endfor -%}
+	{%- endif -%}						
+</div>
+
+</section>

@@ -1,0 +1,44 @@
+<section class="elevate-your-cooking">
+<div class="elevate-your-cooking_box">
+<div class="row align-items-center">
+	<div class="col-md-6">
+		{%if siteSettings.textbox3 is not empty %}<h2 class="d-md-none">{{siteSettings.textbox3}}</h2>{%endif%}
+		{%- if siteSettings.image is not empty and siteSettings.image.one() is not null -%}
+		<img src="{{siteSettings.image.one().getUrl('resizeTo665px')}}" alt="" title="">
+		{%- endif -%}
+	</div>
+	<div class="col-md-6">
+		<div class="row align-items-center">
+			<div class="col-sm-7 col-md-12">
+				{%if siteSettings.textbox3 is not empty %}<h2 class="d-none d-md-block">{{siteSettings.textbox3}}</h2>{%endif%}
+				{{siteSettings.textEditorSimple2}}
+			</div>
+			<div class="col-sm-5 col-md-12 text-sm-right text-md-left">
+				{%- if currentSite.handle != 'tcbmarketing'-%}
+					<a href="/select-plan" class="defult-btn green-bg" >{{siteSettings.textEditorSimple3}}</a>
+				{%- else -%}
+					<a href="/marketing/select-plan" class="defult-btn green-bg" >{{siteSettings.textEditorSimple3}}</a>
+				{%- endif -%}
+				{# <!--
+				{%- set link = '' -%}
+					{%- if siteSettings.linkx is not empty -%}
+						{%- if siteSettings.linkx.one().type == 'internal' -%}
+							{%- if siteSettings.linkx.one().linkTo is not empty and siteSettings.linkx.one().linkTo.one() is not null -%}
+								{%- set link = '<a href="' ~ siteSettings.linkx.one().linkTo.one().url ~ '" class="defult-btn green-bg">'-%}
+							{%- endif -%}
+						{%- else -%}
+							{%- if siteSettings.linkx.one().externalurl is not empty -%}
+								{%- set link = '<a href="' ~ siteSettings.linkx.one().externalurl ~ '" target="_blank" class="defult-btn green-bg">'-%}
+							{%- endif -%}
+						{%- endif -%}
+					{%- endif -%}
+				{%-if link is not empty -%}
+				{{link|raw}}{{siteSettings.textEditorSimple3}}</a>
+				{%- endif -%}
+				--> #}
+			</div>
+		</div>                
+	</div>
+</div>
+</div>	        
+</section>
